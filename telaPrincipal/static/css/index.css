@@ -1,0 +1,148 @@
+body {
+  background-color: white !important;
+}
+.wrapper {
+  display: grid;
+  width: 1vh;
+  grid-template-rows: 8vh;
+  background-color: white;
+
+  display: -ms-grid;
+  -ms-grid-rows: 8vh;
+}
+.wrapper .setor {
+  display: flex;
+  border-left: 1vh solid white;
+  border-right: 0.5vh solid white;
+  border-top: 0.5vh solid white;
+  border-bottom: 0.5vh solid white;
+  justify-content: center;
+  align-items: center;
+  font-size: 3vh;
+  background-color: rgb(77,153,224);
+  width: 18vh;
+}
+.wrapper .dia {
+  border: 1px solid #848484;
+  font-size:2.5vh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1.3em;
+  width: 18vh;
+}
+.wrapper .dianoprazo {
+  background-color: rgb(77,204,0);
+  border: 0.5vh solid white;
+  color: white;
+}
+.wrapper .x {
+
+}
+.wrapper .diaforadoprazo {
+  background-color: Gold;
+  border-color: black;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border: 0.5vh solid white;
+}
+.wrapper .ultimodiaforadoprazo {
+  background-color: gold;
+}
+.wrapper .grupocartao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: white;
+  width: 17.5vh;
+  height: 19vh;
+
+  display: -ms-grid;
+  -ms-grid-columns: 1fr 1fr;
+}
+.wrapper .grupocartaonoprazo {
+  border: 0.1vh solid;
+  border-color: rgb(77,204,0);
+  padding-left: 0.5vh;
+}
+.wrapper .grupocartaoforadoprazo {
+  border: 0.1vh solid;
+  border-color: Gold;
+  padding-left: 0.5vh;
+}
+.wrapper .grupocartaoprimcoluna {
+  border-left: 0px;
+}
+.wrapper .grupocartaoultcoluna {
+  border-right: 0px;
+  border-bottom: 0.1vh solid gold;
+  border-top: 0.1vh solid gold;
+  border-left: 0.1vh solid gold;
+}
+.wrapper .grupocartaoprimlinha {
+  border-top: 0px;
+}
+.wrapper .grupocartaoultlinha {
+  border-bottom: 0px;
+}
+.wrapper .domingo {
+  background-color: lemonchiffon;
+}
+.grupocartao .cartao{
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5vh;
+  height: 8.75vh;
+  width: 8.2vh;
+  margin-top:0.5vh;
+  margin-right:0.5vh;
+}
+.grupocartao .cartao div { /*paliativo*/
+  text-align:left;
+  line-height: 1.4;
+  font-weight: 550;
+  padding-left: 0.4vh;
+  padding-right: 0.4vh;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.grupocartao .cartao .diasrestantes {
+   text-align: right;
+ }
+.grupocartao .cartaonoprazodeentrega {
+  background-color: green;
+  color: white;
+}
+.grupocartao .cartaonoprazodeentrega a {
+  color: white;
+}
+.grupocartao .cartaoforadoprazodeentrega1 {
+  background-color: Gold;
+  color: black;
+}
+.grupocartao .cartaoforadoprazodeentrega2 {
+  background-color: OrangeRed;
+}
+.grupocartao .cartaoforadoprazodeentrega3 {
+  background-color: Red;
+}
+.grupocartao .cartaoforadoprazodeentrega1 a, .grupocartao .cartaoforadoprazodeentrega2 a, .grupocartao .cartaoforadoprazodeentrega3 a{ /*paliativo*/
+  color: black;
+}
+.wrapper .grupocartaonoprazo .grupomais {
+  position: absolute;
+  border: 1px solid black;
+  width: 17.8vh;
+  display: none;
+}
+.wrapper .grupocartaoforadoprazo .grupovisivel {
+
+}
+.wrapper .grupocartaoforadoprazo .grupomais {
+  position: absolute;
+  border: 1px solid black;
+  width: 17.8vh;
+  display: none;
+}
+.grupocartao .mais{
+  font-size: 4vh;
+}

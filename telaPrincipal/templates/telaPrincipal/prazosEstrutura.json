@@ -1,0 +1,21 @@
+{% if prazos == "empty" %}
+  [
+    {
+      "prazopadraocorte": "-",
+      "prazopadraocaldsolda": "-",
+      "prazopadraousinagem": "-",
+      "prazopadraopintura": "-"
+    }
+  ]
+{% else %}
+  {% for p in prazos %}
+    [
+      {
+        "prazopadraocorte": "{{p.prazopadraocorte}}",
+        "prazopadraocaldsolda": "{{p.prazopadraocaldsolda}}",
+        "prazopadraousinagem": "{{p.prazopadraousinagem}}",
+        "prazopadraopintura": "{{p.prazopadraopintura}}"
+      }
+    ]
+  {% endfor %}
+{% endif %}

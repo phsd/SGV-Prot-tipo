@@ -1,0 +1,294 @@
+{% extends 'telaPrincipal/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% load static %}
+
+{% block title %}{{ maquina.1 }} - Número de série: {{ maquina.0 }}{% endblock %}
+{% block h1Pagina %}{{ maquina.1 }} - Número de série: {{ maquina.0 }}{% endblock %}
+
+{% block breadcrumTextRight %}
+  <ol class="breadcrumb text-right">
+    <li style="text-transform:none;"><a href="{% url 'telaPrincipal:index' %}">Gestão a Vista</a></li>
+    <li class="active" style="text-transform:none;">Programação Máquina/Pacote</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  <style>
+    body {
+      background-color: white !important;
+    }
+    .maquina {
+      display: grid;
+      grid-template-columns: 20vh 1fr;
+
+      display: -ms-grid;
+      -ms-grid-columns: 20vh 1fr;
+    }
+    .estrutura {
+      padding: 1vh;
+      font-weight: bold;
+    }
+    .estruturadestaque {
+      background-color: #E5FF66 !important;
+      color: black !important;
+      padding-bottom: 1vh;
+      padding-right: 1vh;
+    }
+    .wrapper {
+      display: grid;
+      grid-template-columns: 11vh 1fr;
+
+      display: -ms-grid;
+      -ms-grid-columns: 11vh 1fr;
+    }
+    .wrapper .wrapper1 {
+      font-weight: 600;
+      background-color: #008080;
+      margin-top: 1vh;
+      padding-top: 0.2vh;
+      padding-left: 0.3vh;
+      color: white;
+      font-size: 1.6vh;
+    }
+    .wrapper .wrapper2 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      display: -ms-grid;
+    }
+    .linhadotempo {
+      display: grid;
+      font-size: 1.5vh;
+
+      display: -ms-grid;
+    }
+    .linhadotempo .menu {
+      margin-left: 1vh;
+      margin-top: 1vh;
+      padding: 0.5vh;
+      background-color: #008080;
+      color: white;
+      font-weight: 600;
+    }
+    .linhadotempo .bloco {
+      margin: 1vh 0vh 1vh 1vh;
+      background-color: #00AACC;
+      font-weight: 500;
+      color: white;
+      text-align: center;
+      font-size: 1.5vh;
+      min-width: 6vh;
+    }
+    .linhadotempo .bloco .numdoDia{
+      font-weight: bold;
+    }
+    .linhadotempo .bloconoprazodeentrega {
+      background-color: #009900;
+    }
+    .linhadotempo .blocoforadoprazodeentrega {
+      background-color: red;
+    }
+    .linhadotempo .domingo {
+      background-color: lemonchiffon;
+      color: black;
+    }
+  </style>
+
+
+
+    {% for e in estruturas %}
+    <div class="content mt-3">
+      <div class="maquina">
+
+        <div class="estrutura" style="-ms-grid-row:{{forloop.counter}}; -ms-grid-column:1;">
+          Estrutura: {{e.1}}<br/ >
+          MO: {{ e.0 }}
+        </div> <!--class estrutura-->
+        <div class="wrapper"  style="-ms-grid-row:{{forloop.counter}}; -ms-grid-column:2;">
+          <div class="wrapper1 {{ e.20 }}" style="-ms-grid-row:1; -ms-grid-column:1;">Programado:</div>
+          <div class="wrapper2"style="-ms-grid-row:1; -ms-grid-column:2;">
+            <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.2 }}), 7vh); -ms-grid-column:1; -ms-grid-row: 1;">
+              <div class="menu {{ e.20 }}" style="-ms-grid-row: 1; grid-column: 1/-1; -ms-grid-column-span: {{e.2}};">
+                Corte
+              </div>
+              {% for i in e.3 %}
+                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                    <div class="numdoDia">{{i.0}}</div>
+                    {{ i.1|date:"j/m" }}<br />
+                  </div>
+              {% endfor %}
+            </div> <!--class linhadotempo-->
+
+            <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.4 }}), 7vh); -ms-grid-column:2; -ms-grid-row: 1;">
+              <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.4}};">
+                Cald/Solda
+              </div>
+              {% for i in e.5 %}
+                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                    <div class="numdoDia">{{i.0}}</div>
+                    {{ i.1|date:"j/m" }}
+                  </div>
+              {% endfor %}
+            </div> <!--class linhadotempo-->
+
+            <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.6 }}),7vh); -ms-grid-column:3; -ms-grid-row: 1;">
+              <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.6}};">
+                Usinagem
+              </div>
+              {% for i in e.7 %}
+                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                    <div class="numdoDia">{{i.0}}</div>
+                    {{ i.1|date:"j/m" }}
+                  </div>
+              {% endfor %}
+            </div> <!--class linhadotempo-->
+
+            <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.8 }}),7vh); -ms-grid-column:4; -ms-grid-row: 1;">
+              <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.8}};">
+                Pintura
+              </div>
+              {% for i in e.9 %}
+                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                    <div class="numdoDia">{{i.0}}</div>
+                    {{ i.1|date:"j/m" }}
+                  </div>
+              {% endfor %}
+            </div> <!--class linhadotempo-->
+
+            <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.10 }}),7vh); -ms-grid-column:5; -ms-grid-row: 1;">
+              {% if e.10 > 0 %}
+                <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.10}};">
+                  Extra
+                </div>
+                {% for i in e.11 %}
+                    <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                      <div class="numdoDia">{{i.0}}</div>
+                      {{ i.1|date:"j/m" }}
+                    </div>
+                {% endfor %}
+              {% endif %}
+            </div><!--class linhadotempo-->
+          </div> <!--class wrapper2-->
+
+
+          <div class="wrapper1 {{ e.20 }}" style="-ms-grid-row:2; -ms-grid-column:1;">Executado:</div>
+          <div class="wrapper2" style="-ms-grid-row:2; -ms-grid-column:2;">
+            {% if e.12 > 0 %}
+              <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.12 }}),7vh); -ms-grid-column:1; -ms-grid-row: 1;">
+                <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.12}};">
+                  Corte
+                </div>
+                {% for i in e.13 %}
+                    <div class="bloco {{i.2}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                      <div class="numdoDia">{{i.0}}</div>
+                        {% if forloop.revcounter ==  1 %}
+                          {% if i.3 == "2em1"%}
+                            <div>
+                              {{ i.1|date:"j-" }}
+                              {{ i.4|date:"j/m" }}
+                            </div>
+                            {{ i.4|date:"H:i" }}
+                          {% else %}
+                            <div>{{ i.1|date:"j/m" }}</div>
+                            {{ i.1|date:"H:i" }}
+                          {% endif %}
+                        {% else %}
+                          {{ i.1|date:"j/m" }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if e.14 > 0 %}
+              <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.14 }}),7vh); -ms-grid-column:1; -ms-grid-row: 1;">
+                <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.14}};">
+                  Cald/Solda
+                </div>
+                {% for i in e.15 %}
+                    <div class="bloco {{i.2}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                      <div class="numdoDia">{{i.0}}</div>
+                        {% if forloop.revcounter ==  1 %}
+                          {% if i.3 == "2em1"%}
+                            <div>
+                              {{ i.1|date:"j-" }}
+                              {{ i.4|date:"j/m" }}
+                            </div>
+                            {{ i.4|date:"H:i" }}
+                          {% else %}
+                            <div>{{ i.1|date:"j/m" }}</div>
+                            {{ i.1|date:"H:i" }}
+                          {% endif %}
+                        {% else %}
+                          {{ i.1|date:"j/m" }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if e.16 > 0 %}
+              <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.16 }}),7vh); -ms-grid-column:1; -ms-grid-row: 1;">
+                <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.16}};">
+                  Usinagem
+                </div>
+                {% for i in e.17 %}
+                    <div class="bloco {{i.2}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                      <div class="numdoDia">{{i.0}}</div>
+                        {% if forloop.revcounter ==  1 %}
+                          {% if i.3 == "2em1"%}
+                            <div>
+                              {{ i.1|date:"j-" }}
+                              {{ i.4|date:"j/m" }}
+                            </div>
+                            {{ i.4|date:"H:i" }}
+                          {% else %}
+                            <div>{{ i.1|date:"j/m" }}</div>
+                            {{ i.1|date:"H:i" }}
+                          {% endif %}
+                        {% else %}
+                          {{ i.1|date:"j/m" }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if e.18 > 0 %}
+              <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.18 }}),7vh); -ms-grid-column:1; -ms-grid-row: 1;">
+                <div class="menu {{ e.20 }}" style="grid-column: 1/-1; -ms-grid-column-span: {{e.18}};">
+                  Pintura
+                </div>
+                {% for i in e.19 %}
+                    <div class="bloco {{i.2}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                      <div class="numdoDia">{{i.0}}</div>
+                        {% if forloop.revcounter ==  1 %}
+                          {% if i.3 == "2em1"%}
+                            <div>
+                              {{ i.1|date:"j-" }}
+                              {{ i.4|date:"j/m" }}
+                            </div>
+                            {{ i.4|date:"H:i" }}
+                          {% else %}
+                            <div>{{ i.1|date:"j/m" }}</div>
+                            {{ i.1|date:"H:i" }}
+                          {% endif %}
+                        {% else %}
+                          {{ i.1|date:"j/m" }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+          </div> <!--class wrapper2-->
+        </div> <!--class wrapper-->
+      </div> <!--class maquina-->
+    </div>
+    {% endfor %}
+    <link rel="stylesheet" href="{% static 'css/index0.css' %}">
+  {% endblock %}

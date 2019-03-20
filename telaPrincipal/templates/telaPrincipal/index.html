@@ -1,0 +1,180 @@
+{% extends 'telaPrincipal/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% load static %}
+
+{% block title %}Sistema de Gestão a Vista{% endblock %}
+{% block h1Pagina %}Quadro de Gestão a Vista{% endblock %}
+
+{% block content %}
+
+  <div class="content mt-3" style="background-color: white; margin-top:0 !important; padding-left: 0 !important;">
+    <div class="wrapper" style="grid-template-columns: repeat(calc(1 + {{CONST_NUMDIASNOPRAZO}} + {{CONST_NUMDIASFORADOPRAZO}}), 1fr);">
+      <div class="x" style="-ms-grid-row: 1; -ms-grid-column: 1;"></div>
+      {% for i in diasnoprazo reversed %}
+        {% if forloop.counter == 1 %}
+          <div class="dia dianoprazo" style="-ms-grid-row: 1; -ms-grid-column: {{forloop.counter|add:1}}; font-size: 3vh; padding-top: 1.4vh;">
+            +{{ i.1 }}
+          </div>
+        {% else %}
+          <div class="dia dianoprazo" style="-ms-grid-row: 1; -ms-grid-column: {{forloop.counter|add:1}};">
+            {{ i.1 }}
+            <br />
+            {{ i.0|date:"j/m-D" }}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% for i in diasforadoprazo %}
+        {% if forloop.revcounter == 1 %}
+          <div class="dia diaforadoprazo ultimodiaforadoprazo" style="-ms-grid-row: 1; -ms-grid-column: {{forloop.counter|add:CONST_NUMDIASNOPRAZO|add:1}}; font-size: 3vh; padding-top: 1.4vh;">
+            +{{ forloop.counter }}
+          </div>
+        {% else %}
+          <div class="dia diaforadoprazo" style="-ms-grid-row: 1; -ms-grid-column: {{forloop.counter|add:CONST_NUMDIASNOPRAZO|add:1}};">
+            {{ forloop.counter }}
+            <br />
+            {{ i|date:"j/m-D" }}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% for lGC in gruposCartoes %}
+        <div class="setor" style="-ms-grid-row: {{forloop.counter|add:1}}; -ms-grid-column: 1;">{{lGC.2}}</div>
+        {% for gC in lGC.0 reversed %}
+          {% if gC ==  "domingo" %}
+            <div class="grupocartaonoprazo domingo {% if forloop.parentloop.counter ==  1 %}grupocartaoprimlinha{% endif %} {% if forloop.parentloop.revcounter ==  1 %}grupocartaoultlinha{% endif %} {% if forloop.counter ==  1 %}grupocartaoprimcoluna{% endif %}" style="-ms-grid-row: {{forloop.parentloop.counter|add:1}}; -ms-grid-column: {{forloop.counter|add:1}};"></div>
+          {% else %}
+            <div class="grupocartaonoprazo         {% if forloop.parentloop.counter ==  1 %}grupocartaoprimlinha{% endif %} {% if forloop.parentloop.revcounter ==  1 %}grupocartaoultlinha{% endif %} {% if forloop.counter ==  1 %}grupocartaoprimcoluna{% endif %}" style="-ms-grid-row: {{forloop.parentloop.counter|add:1}}; -ms-grid-column: {{forloop.counter|add:1}};">
+              <div class="grupovisivel">
+                <div class="grupocartao">
+                  {% for csnoPrazo in gC|slice:":4" %}
+                    {% if csnoPrazo.1 == "empty" %}
+                      <div class="cartao" style="-ms-grid-row: {{ csnoPrazo.3 }}; -ms-grid-column: {{ csnoPrazo.4 }};">
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                      </div>
+                    {% elif csnoPrazo.1 == "mais" %}
+                      <div class="cartao {{ csnoPrazo.2 }} mais" style="-ms-grid-row: 2; -ms-grid-column: 2;">
+                        +{{ csnoPrazo.0 }}
+                      </div>
+                    {% else %}
+                        <div class="cartao {{ csnoPrazo.2 }}" style="-ms-grid-row: {{ csnoPrazo.3 }}; -ms-grid-column: {{ csnoPrazo.4 }};">
+                          <a href="{% url 'telaPrincipal:urlMaquina' csnoPrazo.1.idMaquina csnoPrazo.1.id %}" >
+                            <div>{{ csnoPrazo.1.nome }} - {{ csnoPrazo.1.id_maquina.serial }}</div>
+                            <div>{{ csnoPrazo.1.id_estruturas.nome }}</div>
+                            <div>{{ csnoPrazo.1.ordemproducao }}</div>
+                            <div class="diasrestantes">{{ csnoPrazo.0 }} dias</div>
+                          </a>
+                        </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="grupomais">
+                <div class="grupocartao">
+                {% for csnoPrazo in gC %}
+                  {% if csnoPrazo.1 == "empty" %}
+                  {% elif csnoPrazo.1 == "mais" %}
+                  {% else %}
+                      <div class="cartao {{ csnoPrazo.2 }}" style="-ms-grid-row: {{ csnoPrazo.3 }}; -ms-grid-column: {{ csnoPrazo.4 }};">
+                        <a href="{% url 'telaPrincipal:urlMaquina' csnoPrazo.1.idMaquina csnoPrazo.1.id %}" >
+                          <div>{{ csnoPrazo.1.nome }} - {{ csnoPrazo.1.id_maquina.serial }}</div>
+                          <div>{{ csnoPrazo.1.id_estruturas.nome }}</div>
+                          <div>{{ csnoPrazo.1.ordemproducao }}</div>
+                          <div class="diasrestantes">{{ csnoPrazo.0 }} dias</div>
+                        </a>
+                      </div>
+                  {% endif %}
+                {% endfor %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+
+
+
+        {% for gC in lGC.1 %}
+          <div class="grupocartaoforadoprazo {% if forloop.parentloop.counter ==  1 %}grupocartaoprimlinha{% endif %} {% if forloop.parentloop.revcounter ==  1 %}grupocartaoultlinha{% endif %} {% if forloop.revcounter ==  1 %}grupocartaoultcoluna{% endif %}" style="-ms-grid-row: {{forloop.parentloop.counter|add:1}}; -ms-grid-column: {{forloop.counter|add:CONST_NUMDIASNOPRAZO|add:1}};">
+            <div class="grupovisivel">
+              <div class="grupocartao">
+                {% for csforadoPrazo in gC|slice:":4" %}
+                  {% if csforadoPrazo.1 == "empty" %}
+                    <div class="cartao" style="-ms-grid-row: {{ csforadoPrazo.3 }}; -ms-grid-column: {{ csforadoPrazo.4 }};">
+                      <div>&nbsp;</div>
+                      <div>&nbsp;</div>
+                      <div>&nbsp;</div>
+                      <div>&nbsp;</div>
+                    </div>
+                  {% elif csforadoPrazo.1 == "mais" %}
+                    <div class="cartao {{ csforadoPrazo.2 }} mais">
+                      +{{ csforadoPrazo.0 }}
+                    </div>
+                  {% else %}
+                      <div class="cartao {{ csforadoPrazo.2 }}" style="-ms-grid-row: {{ csforadoPrazo.3 }}; -ms-grid-column: {{ csforadoPrazo.4 }};">
+                        <a href="{% url 'telaPrincipal:urlMaquina' csforadoPrazo.1.idMaquina csforadoPrazo.1.id %}" >
+                          <div>{{ csforadoPrazo.1.nome }} - {{ csforadoPrazo.1.id_maquina.serial }}</div>
+                          <div>{{ csforadoPrazo.1.id_estruturas.nome }}</div>
+                          <div>{{ csforadoPrazo.1.ordemproducao }}</div>
+                          <div class="diasrestantes">
+                              {{ csforadoPrazo.0 }} dias
+                          </div>
+                        </a>
+                      </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="grupomais">
+              <div class="grupocartao">
+              {% for csforadoPrazo in gC %}
+                {% if csforadoPrazo.1 == "empty" %}
+                {% elif csforadoPrazo.1 == "mais" %}
+                {% else %}
+                  <a href="{% url 'telaPrincipal:urlMaquina' csforadoPrazo.1.idMaquina csforadoPrazo.1.id %}" >
+                    <div class="cartao {{ csforadoPrazo.2 }}" style="-ms-grid-row: {{ csforadoPrazo.3 }}; -ms-grid-column: {{ csforadoPrazo.4 }};">
+                      <div>{{ csforadoPrazo.1.nome }} - {{ csforadoPrazo.1.id_maquina.serial }}</div>
+                      <div>{{ csforadoPrazo.1.id_estruturas.nome }}</div>
+                      <div>{{ csforadoPrazo.1.ordemproducao }}</div>
+                      <div class="diasrestantes">{{ csforadoPrazo.0 }} dias</div>
+                    </div>
+                  </a>
+                {% endif %}
+              {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div> <!-- .content -->
+
+  <script>
+      (function($) {
+          "use strict";
+
+          jQuery('#vmap').vectorMap({
+              map: 'world_en',
+              backgroundColor: null,
+              color: '#ffffff',
+              hoverOpacity: 0.7,
+              selectedColor: '#1de9b6',
+              enableZoom: true,
+              showTooltip: true,
+              values: sample_data,
+              scaleColors: ['#1de9b6', '#03a9f5'],
+              normalizeFunction: 'polynomial'
+          });
+      })(jQuery);
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'telaPrincipal/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+{% load static %}
+
+{% block title %}Adicionar Cartão{% endblock %}
+{% block h1Pagina %}Adicionar Cartão{% endblock %}
+
+{% block breadcrumTextRight %}
+  <ol class="breadcrumb text-right">
+    <li style="text-transform:none;"><a href="{% url 'telaPrincipal:index' %}">Gestão a Vista</a></li>
+    <li class="active" style="text-transform:none;">Adicionar Cartão</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+        <style>
+          .diasPadrao {
+            font-weight: bold;
+          }
+        </style>
+
+        <div class="content mt-3">
+
+          <div class="card">
+            <div class="card-header">
+                <strong>Inserir Estrutura</strong> <small> (Novo Cartão no Quadro de Gestão a Vista)</small>
+            </div>
+            <div class="card-body card-block">
+              <form method="POST" id="formEstrutura" dataCarregarEstruturasURL="{% url 'telaPrincipal:ajaxCarregarEstruturas' %}" dataCarregarPrazosEstrutura="{% url 'telaPrincipal:ajaxCarregarPrazosEstrutura' %}" class="form-row">
+                {% csrf_token %}
+                <div class="col-md-6">
+                  {{ form.id_maquina|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                  {{ form.id_estruturas|as_crispy_field }}
+                </div>
+                <div class="col-md-6">
+                  {{ form.ordemproducao|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-6"></div>
+                <div class="form-group col-md-6">
+                  {{ form.dataInicioManufatura|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-6">
+                  {{ form.dataEntregaMax|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Prazo Padrão Corte:</label>
+                  <div>
+                    <span id ="spanPrazoPadraoCorte" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  {{ form.prazocorte|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Total Corte:</label>
+                  <div>
+                  = <span id ="spanTotalPrazoCorte" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Prazo Padrão Cald/Solda:</label>
+                  <div>
+                    <span id ="spanPrazoPadraoCaldSolda" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  {{ form.prazocaldsolda|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Total Cald/Solda:</label>
+                  <div>
+                  = <span id ="spanTotalCaldSolda" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Prazo Padrão Usinagem:</label>
+                  <div>
+                    <span id ="spanPrazoPadraoUsinagem" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  {{ form.prazousinagem|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Total Usinagem:</label>
+                  <div>
+                  = <span id ="spanTotalUsinagem" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Prazo Padrão Pintura:</label>
+                  <div>
+                    <span id ="spanPrazoPadraoPintura" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  {{ form.prazopintura|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="col-form-label">Total Pintura:</label>
+                  <div>
+                  = <span id ="spanTotalPintura" class="diasPadrao">-</span> dias
+                  </div>
+                </div>
+                <div class="col-6 text-center"><a href="../" class="btn btn-warning">Cancelar</a></div>
+                <div class="col-6 text-center"><button type="submit" class="btn btn-info">Salvar</button></div>
+              </form>
+            </div>
+          </div>
+        </div> <!-- .content -->
+
+        <script>
+          $( "#id_prazocorte" ).addClass("form-control-sm");
+
+          $("#id_id_maquina").change(function () {
+            var url = $("#formEstrutura").attr("dataCarregarEstruturasURL");  // get the url of the `load_cities` view
+            var idMaquina = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+              url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+              data: {
+                'id_maquina': idMaquina       // add the country id to the GET parameters
+              },
+              success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_id_estruturas").html(data);  // replace the contents of the city input with the data that came from the server
+              }
+            });
+          });
+
+          $("#id_id_estruturas").change(function () {
+            var url = $("#formEstrutura").attr("dataCarregarPrazosEstrutura");  // get the url of the `load_cities` view
+            var id_estrutura = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+              type: "GET",
+              url: url,
+              timeout: 3000,
+              contentType: "application/json; charset=utf-8",
+              cache: false,
+              data: {
+                'id_estrutura': id_estrutura
+              },
+              success: function (data) {   // `data` is the return of the `load_cities` view function
+                var prazos = JSON.parse(data);
+                $.each(prazos, function(i, prazo){
+                  $("#spanPrazoPadraoCorte").html(prazo.prazopadraocorte);
+                  $("#spanTotalPrazoCorte").html(Number(prazo.prazopadraocorte) + Number($("#id_prazocorte").val()));
+                  $("#spanPrazoPadraoCaldSolda").html(prazo.prazopadraocaldsolda);
+                  $("#spanTotalCaldSolda").html(Number(prazo.prazopadraocaldsolda) + Number($("#id_prazocaldsolda").val()));
+                  $("#spanPrazoPadraoUsinagem").html(prazo.prazopadraousinagem);
+                  $("#spanTotalUsinagem").html(Number(prazo.prazopadraousinagem) + Number($("#id_prazousinagem").val()));
+                  $("#spanPrazoPadraoPintura").html(prazo.prazopadraopintura);
+                  $("#spanTotalPintura").html(Number(prazo.prazopadraopintura) + Number($("#id_prazopintura").val()));
+                });
+              }
+            });
+          });
+
+          $("#id_prazocorte").change(function () {
+            $("#spanTotalPrazoCorte").html(Number($("#spanPrazoPadraoCorte").text()) + Number($(this).val()));
+          });
+        </script>
+        <script>
+            (function($) {
+                "use strict";
+
+                jQuery('#vmap').vectorMap({
+                    map: 'world_en',
+                    backgroundColor: null,
+                    color: '#ffffff',
+                    hoverOpacity: 0.7,
+                    selectedColor: '#1de9b6',
+                    enableZoom: true,
+                    showTooltip: true,
+                    values: sample_data,
+                    scaleColors: ['#1de9b6', '#03a9f5'],
+                    normalizeFunction: 'polynomial'
+                });
+            })(jQuery);
+        </script>
+
+{% endblock %}
