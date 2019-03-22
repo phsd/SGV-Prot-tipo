@@ -79,10 +79,13 @@
 
                     <h3 class="menu-title">Outros Quadros <span style="color:blue;">Sugestões</span></h3><!-- /.menu-title -->
                     <li>
-                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Gestão a Vista Suprimentos</a>
+                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Gestão a Vista Contr. de Qualid.</a>
                     </li>
                     <li>
                         <a href="#"> <i class="menu-icon fa fa-area-chart"></i>Gestão a Vista Expedição</a>
+                    </li>
+                    <li>
+                        <a href="#"> <i class="menu-icon fa fa-bar-chart"></i>Gestão a Vista Suprimentos</a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -101,7 +104,7 @@
             <div class="header-menu">
 
                 <div class="col-sm-7">
-                    <a id="menuToggle" class="menutoggle pull-left" style="padding-top:1.2vh;"><i class="fa fa fa-tasks"></i></a>
+                    <a id="menuToggle" class="menutoggle pull-left" style="padding-top:12px;"><i class="fa fa fa-tasks"></i></a>
                     <div class="header-left">
                         <button class="search-trigger"><i class="fa fa-bookmark"></i></button>
 
@@ -217,9 +220,16 @@
     </div><!-- /#right-panel -->
 
     <!-- Right Panel -->
-    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'vendors/jquery/dist/jquery.min.js"></script>
     <script src="{% static 'vendors/popper.js/dist/umd/popper.min.js' %}"></script>
     <script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <script src="{% static 'vendors/chart.js/dist/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/widgets.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/dist/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <script src="{% static 'vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
   </body>
 </html>
