@@ -68,7 +68,7 @@ class Estrutura (models.Model):
         null=False, blank=False
     )
     dataEntregaMax = models.DateTimeField(null=False, blank=False)
-    dataEntradaSistema = models.DateTimeField(auto_now_add=True)
+    dataEntradaSistema = models.DateTimeField()
     dataInicioManufatura = models.DateTimeField(null=False, blank=False)
     dataBaixaCorte = models.DateTimeField(null=True, blank=True)
     dataBaixaCaldSolda = models.DateTimeField(null=True, blank=True)
