@@ -26,7 +26,7 @@ SECRET_KEY = 'fb&tk_l-$orfe2+9q9%nm^d$!8n((qs338b9vo21rmwt$f)uj1'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['192.168.1.100', '127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['192.168.1.100', '127.0.0.1', 'sgvl.pythonanywhere.com']
 
 # Application definition
 
