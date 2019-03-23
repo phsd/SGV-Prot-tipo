@@ -4,4 +4,7 @@ from django.contrib import admin
 from .models import Estrutura
 from .models import Maquina
 
+admin.site.register(Maquinas)
+admin.site.register(Estruturas)
+admin.site.register(Maquina)
 admin.site.register(Estrutura)
