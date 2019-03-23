@@ -1,10 +1,7 @@
 {% extends 'telaPrincipal/base.html' %}
 
-{% load crispy_forms_tags %}
 {% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{{ form.media }}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block title %}Sistema de Gestão a Vista{% endblock %}
@@ -18,7 +15,7 @@
       {% for i in diasnoprazo reversed %}
         {% if forloop.counter == 1 %}
           <div class="dia dianoprazo" style="-ms-grid-row: 1; -ms-grid-column: {{forloop.counter|add:1}}; font-size: 3vh; padding-top: 1.4vh;">
-            +{{ i.1 }}
+            +{{ i.1|add:1 }}
           </div>
         {% else %}
           <div class="dia dianoprazo" style="-ms-grid-row: 1; -ms-grid-column: {{forloop.counter|add:1}};">

@@ -1,6 +1,8 @@
 from . import views
 from django.urls import path
 from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
+from django.views.generic.base import TemplateView
 
 app_name = 'telaPrincipal'
 
@@ -11,4 +13,6 @@ urlpatterns = [
     url(r'^FormEstrutura', views.formularioEstrutura, name='urlFormEstrutura'),
     url(r'^ajax/carregarEstruturas/', views.carregarEstruturas, name='ajaxCarregarEstruturas'),
     url(r'^ajax/carregarPrazosEstrutura/', views.carregarPrazosEstrutura, name='ajaxCarregarPrazosEstrutura'),
+    url(r'^accounts/login/', auth_views.LoginView.as_view(), name="login"),
+    url(r'^accounts/logout/', auth_views.LogoutView.as_view(), name="logout"),
 ]

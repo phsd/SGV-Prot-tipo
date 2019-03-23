@@ -1,0 +1,39 @@
+{% extends 'telaPrincipal/base.html' %}
+
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{{ form.media }}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+{% block h1Pagina %}Login{% endblock %}
+{% block content %}
+  <div class="content mt-3">
+    <div class="card">
+      <div class="card-body card-block">
+        {% if form.errors %}
+          <p class="alert alert-danger" role="alert">Usuário e/ou senha incorretos</p>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group col-md-5 text-right">
+            Usuário:
+          </div>
+          <div class="form-group col-md-7">
+            {{ form.username }}
+          </div>
+          <div class="form-group col-md-5 text-right">
+            Senha:
+          </div>
+          <div class="form-group col-md-7">
+            {{ form.password }}
+          </div>
+          <div class="form-group col-md-12 text-center">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

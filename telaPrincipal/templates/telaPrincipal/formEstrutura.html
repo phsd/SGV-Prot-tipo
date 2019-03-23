@@ -1,10 +1,7 @@
 {% extends 'telaPrincipal/base.html' %}
 
-{% load crispy_forms_tags %}
 {% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{{ form.media }}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block title %}Adicionar Cartão{% endblock %}
@@ -116,13 +113,13 @@
           </div>
         </div> <!-- .content -->
 
+        <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
         <script>
           $( "#id_prazocorte" ).addClass("form-control-sm");
 
           $("#id_id_maquina").change(function () {
             var url = $("#formEstrutura").attr("dataCarregarEstruturasURL");  // get the url of the `load_cities` view
             var idMaquina = $(this).val();  // get the selected country ID from the HTML input
-
             $.ajax({                       // initialize an AJAX request
               url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
               data: {
@@ -185,5 +182,4 @@
                 });
             })(jQuery);
         </script>
-
 {% endblock %}

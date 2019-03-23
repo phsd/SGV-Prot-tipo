@@ -9,6 +9,8 @@ from .forms import FormEstrutura
 from .models import Estruturas
 import math
 
+from django.contrib.auth.decorators import login_required
+
 def somadiasuteis(inicio, numdias):
     diasUteis = 0
     if inicio.hour > 12:
@@ -78,7 +80,6 @@ def index(request):
         for b in busca:
             dataPrazoMaxProcesso = somadiasuteis(b.dataInicioProcesso, (b.prazoPadraoProcesso + b.prazoProcesso)).replace(hour=23, minute=59, second=59, microsecond=0)#NÃO MEXER
             posicaoGestaoaVista = subtrairdatas(datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0), dataPrazoMaxProcesso)#NÃO MEXER
-            print(b.ordemproducao)
             if posicaoGestaoaVista >= 0:
                 diasNecessarios = subtrairdatasuteis(dataPrazoMaxProcesso, datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0))
             else:
@@ -497,7 +498,6 @@ def maquina(request, id_maquina, id_estrutura):
             estrutura.append("estruturadestaque")
         else:
             estrutura.append("")
-        print (estrutura[20])
 
         estruturas.append(estrutura)
 
@@ -507,6 +507,7 @@ def maquina(request, id_maquina, id_estrutura):
     }
     return render (request, "telaPrincipal/maquina.html", contexto)
 
+@login_required
 def formularioMaquina(request):
     if request.method == "POST":
         form = FormMaquina(request.POST)
@@ -519,13 +520,13 @@ def formularioMaquina(request):
         form = FormMaquina()
         return render(request, 'telaPrincipal/formMaquina.html', {'form': form})
 
+@login_required
 def formularioEstrutura(request):
     if request.method == "POST":
         form = FormEstrutura(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            print("dadsad")
         form = FormEstrutura()
         return render(request, 'telaPrincipal/FormEstrutura.html', {'form': form})
     else:
