@@ -118,6 +118,7 @@
           $( "#id_prazocorte" ).addClass("form-control-sm");
 
           $("#id_id_maquina").change(function () {
+            alert("aqui");
             var url = $("#formEstrutura").attr("dataCarregarEstruturasURL");  // get the url of the `load_cities` view
             var idMaquina = $(this).val();  // get the selected country ID from the HTML input
             $.ajax({                       // initialize an AJAX request
@@ -134,7 +135,6 @@
           $("#id_id_estruturas").change(function () {
             var url = $("#formEstrutura").attr("dataCarregarPrazosEstrutura");  // get the url of the `load_cities` view
             var id_estrutura = $(this).val();  // get the selected country ID from the HTML input
-
             $.ajax({                       // initialize an AJAX request
               type: "GET",
               url: url,
