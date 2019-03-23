@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^FormEstrutura', views.formularioEstrutura, name='urlFormEstrutura'),
     url(r'^ajax/carregarEstruturas/', views.carregarEstruturas, name='ajaxCarregarEstruturas'),
     url(r'^ajax/carregarPrazosEstrutura/', views.carregarPrazosEstrutura, name='ajaxCarregarPrazosEstrutura'),
-    url('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='loginForm'),
+    url('accounts/login/', auth_views.LoginView.as_view(), name='loginForm'),
     url('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
