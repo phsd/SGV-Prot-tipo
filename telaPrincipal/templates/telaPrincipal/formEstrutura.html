@@ -14,10 +14,6 @@
   </ol>
 {% endblock %}
 
-{% block arquivosJS %}
-  <script src="{% static 'js/formEstrutura.js' %}"></script>
-{% endblock %}
-
 {% block content %}
         <style>
           .diasPadrao {
@@ -116,4 +112,8 @@
             </div>
           </div>
         </div> <!-- .content -->
+{% endblock %}
+
+{% block arquivosJS %}
+  <script src="{% static 'js/formEstrutura.js' %}"></script>
 {% endblock %}
