@@ -1,9 +1,3 @@
-$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
-  format: 'MM-DD-YYYY HH:mm:ss',
-});
-
-$( "#id_prazocorte" ).addClass("form-control-sm");
-
 $("#id_id_maquina").change(function () {
   var url = $("#formEstrutura").attr("dataCarregarEstruturasURL");  // get the url of the `load_cities` view
   var idMaquina = $(this).val();  // get the selected country ID from the HTML input
@@ -50,19 +44,8 @@ $("#id_prazocorte").change(function () {
   $("#spanTotalPrazoCorte").html(Number($("#spanPrazoPadraoCorte").text()) + Number($(this).val()));
 });
 
-  (function($) {
-      "use strict";
+$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+  format: 'MM-DD-YYYY HH:mm:ss',
+});
 
-      jQuery('#vmap').vectorMap({
-          map: 'world_en',
-          backgroundColor: null,
-          color: '#ffffff',
-          hoverOpacity: 0.7,
-          selectedColor: '#1de9b6',
-          enableZoom: true,
-          showTooltip: true,
-          values: sample_data,
-          scaleColors: ['#1de9b6', '#03a9f5'],
-          normalizeFunction: 'polynomial'
-      });
-  })(jQuery);
+$( "#id_prazocorte" ).addClass("form-control-sm");
