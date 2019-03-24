@@ -535,13 +535,25 @@ def formularioEstrutura(request):
 
 def carregarEstruturas(request):
     idBusca = request.GET.get('id_maquina')
-    print(idBusca)
-    maquina = Maquina.objects.filter(id=idBusca)
-    for m in maquina:
-        estruturas = Estruturas.objects.filter(id_maquinas_id=m.id).order_by('nome')
-    for e in estruturas:
-        print (e)
-    return render(request, 'telaPrincipal/estruturas_dropdown_list_options.html', {'estruturas': estruturas})
+    #print(idBusca)
+    #maquina = Maquina.objects.filter(id=idBusca)
+    #for m in maquina:
+    #    estruturas = Estruturas.objects.filter(id_maquinas_id=m.id).order_by('nome')
+    #for e in estruturas:
+    #    print (e)
+
+    b = '''SELECT
+            telaPrincipal_estruturas.id, telaPrincipal_estruturas.nome
+        FROM
+            telaPrincipal_estruturas
+        INNER JOIN
+            telaPrincipal_maquinas ON telaPrincipal_estruturas.id_maquinas_id = telaPrincipal_maquinas.id
+        INNER JOIN
+            telaPrincipal_maquina ON telaPrincipal_maquinas.id = telaPrincipal_maquina.id_maquinas_id
+        WHERE
+            telaPrincipal_maquina.id = '''+ idBusca +''';'''
+    busca = models.Estrutura.objects.raw(b)
+    return render(request, 'telaPrincipal/estruturas_dropdown_list_options.html', {'estruturas': busca})
 
 def carregarPrazosEstrutura(request):
     id_estrutura = request.GET.get('id_estrutura')
