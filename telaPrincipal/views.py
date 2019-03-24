@@ -528,10 +528,10 @@ def formularioEstrutura(request):
             post = form.save(commit=False)
             post.save()
         form = FormEstrutura()
-        return render(request, 'telaPrincipal/FormEstrutura2.html', {'form': form})
+        return render(request, 'telaPrincipal/formEstrutura.html', {'form': form})
     else:
         form = FormEstrutura()
-        return render(request, 'telaPrincipal/FormEstrutura2.html', {'form': form})
+        return render(request, 'telaPrincipal/formEstrutura.html', {'form': form})
 
 def carregarEstruturas(request):
     idBusca = request.GET.get('id_maquina')
