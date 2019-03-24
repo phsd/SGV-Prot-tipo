@@ -21,7 +21,6 @@
       </div>
       <div class="card-body card-block">
         <form method="POST" class="form-row">
-          {{ form.media }}
           {% csrf_token %}
           <div class="form-group col-md-6">
             {{ form.id_maquinas|as_crispy_field }}<br/ >
