@@ -1,3 +1,8 @@
+$(function () {
+  $('#datetimepicker1').datetimepicker();
+});
+
+
 $( "#id_prazocorte" ).addClass("form-control-sm");
 
 $("#id_id_maquina").change(function () {
