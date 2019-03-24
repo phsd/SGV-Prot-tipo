@@ -6,7 +6,7 @@ from . import models
 import pytz
 from .forms import FormMaquina
 from .forms import FormEstrutura
-from .models import Estruturas
+from .models import Estruturas, Maquina
 import math
 
 from django.contrib.auth.decorators import login_required
@@ -534,8 +534,10 @@ def formularioEstrutura(request):
         return render(request, 'telaPrincipal/FormEstrutura.html', {'form': form})
 
 def carregarEstruturas(request):
-    id_maquina = request.GET.get('id_maquina')
-    estruturas = Estruturas.objects.filter(id_maquinas=id_maquina).order_by('nome')
+    id_Busca = request.GET.get('id_maquina')
+    maquina = Maquina.objects.filter(id = id_Busca)
+    for m in maquina:
+        estruturas = Estruturas.objects.filter(id_maquinas=m.id_maquinas).order_by('nome')
     return render(request, 'telaPrincipal/estruturas_dropdown_list_options.html', {'estruturas': estruturas})
 
 def carregarPrazosEstrutura(request):
