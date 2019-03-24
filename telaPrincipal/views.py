@@ -525,8 +525,6 @@ def formularioEstrutura(request):
     if request.method == "POST":
         form = FormEstrutura(request.POST)
         if form.is_valid():
-            form.dataInicioManufatura = "2019-03-23 22:14:47"
-            form.dataEntregaMax = "2019-03-23 22:14:47"
             post = form.save(commit=False)
             post.save()
         form = FormEstrutura()
