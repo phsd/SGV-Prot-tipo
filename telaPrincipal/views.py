@@ -534,10 +534,13 @@ def formularioEstrutura(request):
         return render(request, 'telaPrincipal/FormEstrutura.html', {'form': form})
 
 def carregarEstruturas(request):
-    id_Busca = request.GET.get('id_maquina')
-    maquina = Maquina.objects.filter(id = id_Busca)
+    idBusca = request.GET.get('id_maquina')
+    print(idBusca)
+    maquina = Maquina.objects.filter(id=idBusca)
     for m in maquina:
-        estruturas = Estruturas.objects.filter(id_maquinas=m.id_maquinas).order_by('nome')
+        estruturas = Estruturas.objects.filter(id_maquinas_id=m.id).order_by('nome')
+    for e in estruturas:
+        print (e)
     return render(request, 'telaPrincipal/estruturas_dropdown_list_options.html', {'estruturas': estruturas})
 
 def carregarPrazosEstrutura(request):
