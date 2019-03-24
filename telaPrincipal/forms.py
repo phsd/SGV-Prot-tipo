@@ -56,28 +56,14 @@ class FormEstrutura(forms.ModelForm):
                 options={
                     'useCurrent': True,
                     'collapse': False,
-                    'enabledMinutes': [0, 59],
-                },
-                attrs={
-                    "format": "DD-MM-YYYY HH:mm:ss", # moment date-time format
-                    "showClose": True,
-                    "showClear": True,
-                    "showTodayButton": True,
-
+                    'enabledMinutes': [59]
                 }
             ),
             'dataEntregaMax': DateTimePicker(
                 options={
                     'useCurrent': True,
                     'collapse': False,
-                    'enabledMinutes': [0, 59],
-                },
-                attrs={
-                    "format": "DD-MM-YYYY HH:mm:ss", # moment date-time format
-                    "showClose": True,
-                    "showClear": True,
-                    "showTodayButton": True,
-
+                    'enabledMinutes': [59]
                 }
             ),
         }

@@ -1,7 +1,6 @@
-$(function () {
-  $('#datetimepicker1').datetimepicker();
+$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+  
 });
-
 
 $( "#id_prazocorte" ).addClass("form-control-sm");
 

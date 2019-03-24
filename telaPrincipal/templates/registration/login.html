@@ -1,8 +1,5 @@
 {% extends 'telaPrincipal/base.html' %}
 
-{% load bootstrap4 %}
-{% load crispy_forms_tags %}
-{{ form.media }}
 {% load static %}
 
 {% block title %}Login{% endblock %}
@@ -16,6 +13,7 @@
         {% endif %}
 
         <form method="post">
+          {{ form.media }}
           {% csrf_token %}
           <div class="form-group col-md-5 text-right">
             Usuário:
