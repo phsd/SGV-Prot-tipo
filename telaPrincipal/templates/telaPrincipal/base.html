@@ -153,7 +153,7 @@
             <div class="col-sm-8">
                 <div class="page-header float-right">
                     <div class="page-title">
-                        {% block breadcrumTextRight %}{% endblock %}
+                        <script src="{% static 'js/formEstrutura.js' %}"></script>
                     </div>
                 </div>
             </div>
@@ -173,6 +173,6 @@
     <script src="{% static 'vendors/jqvmap/dist/jquery.vmap.min.js' %}"></script>
     <script src="{% static 'vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
     <script src="{% static 'vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
-    <script src="{% static 'js/formEstrutura.js' %}"></script>
+    {% block arquivosJS %}{% endblock %}
   </body>
 </html>
