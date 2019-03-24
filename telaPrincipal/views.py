@@ -525,9 +525,10 @@ def formularioEstrutura(request):
     if request.method == "POST":
         form = FormEstrutura(request.POST)
         if form.is_valid():
+            print ("dadsa")
             post = form.save(commit=False)
             post.save()
-        form = FormEstrutura()
+            form = FormEstrutura()
         return render(request, 'telaPrincipal/formEstrutura.html', {'form': form})
     else:
         form = FormEstrutura()

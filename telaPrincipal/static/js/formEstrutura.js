@@ -45,7 +45,7 @@ $("#id_prazocorte").change(function () {
 });
 
 $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
-  format: 'MM-DD-YYYY HH:mm:ss',
+  format: 'YYYY-MM-DD HH:mm:ss',
 });
 
 $( "#id_prazocorte" ).addClass("form-control-sm");

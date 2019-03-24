@@ -55,15 +55,13 @@ class FormEstrutura(forms.ModelForm):
             'dataInicioManufatura': DateTimePicker(
                 options={
                     'useCurrent': True,
-                    'collapse': False,
-                    'enabledMinutes': [59]
+                    'collapse': False
                 }
             ),
             'dataEntregaMax': DateTimePicker(
                 options={
                     'useCurrent': True,
-                    'collapse': False,
-                    'enabledMinutes': [59]
+                    'collapse': False
                 }
             ),
         }
