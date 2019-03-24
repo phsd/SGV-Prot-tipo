@@ -1,5 +1,5 @@
 $(document).ready(function(){
-   alert("aqui”);
+   alert("aqui");
 });
 
 $( "#id_prazocorte" ).addClass("form-control-sm");
