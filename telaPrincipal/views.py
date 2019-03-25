@@ -139,9 +139,9 @@ def index(request):
                     cartoesnoPrazo.append(["","empty", ""])
             elif len(cartoesnoPrazo) > 4:
                 menorPrazo = 1
-                for y in range (3, len(cartoesforadoPrazo)):
-                    if cartoesforadoPrazo[y][0] < menorPrazo:
-                        menorPrazo = cartoesforadoPrazo[y][0]
+                for y in range (3, len(cartoesnoPrazo)):
+                    if cartoesnoPrazo[y][0] < menorPrazo:
+                        menorPrazo = cartoesnoPrazo[y][0]
                 if menorPrazo > 0:
                     estiloCSSCartaonoPrazodeEntrega = "cartaonoprazodeentrega"
                 elif menorPrazo > -5:
