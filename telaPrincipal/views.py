@@ -242,11 +242,13 @@ def index(request):
             telaPrincipal_estrutura.dataEntregaMax, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_maquina.id As idMaquina
         FROM
-            telaPrincipal_estrutura INNER JOIN telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+            telaPrincipal_estrutura
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         INNER JOIN
             telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
         INNER JOIN
-            telaPrincipal_maquinas ON telaPrincipal_maquina.id = telaPrincipal_maquinas.id
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
             telaPrincipal_estrutura.dataBaixaCorte is null;'''
     gruposCartoesCortenoPrazo, gruposCartoesCorteforadoPrazo = buscarCartoesdosProcessos(b, "corte")
@@ -262,11 +264,13 @@ def index(request):
             telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_maquina.id As idMaquina
         FROM
-            telaPrincipal_estrutura INNER JOIN telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+            telaPrincipal_estrutura
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         INNER JOIN
             telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
         INNER JOIN
-            telaPrincipal_maquinas ON telaPrincipal_maquina.id = telaPrincipal_maquinas.id
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
             telaPrincipal_estrutura.dataBaixaCorte is not null
         AND
@@ -284,11 +288,13 @@ def index(request):
             telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_maquina.id As idMaquina
         FROM
-            telaPrincipal_estrutura INNER JOIN telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+            telaPrincipal_estrutura
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         INNER JOIN
             telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
         INNER JOIN
-            telaPrincipal_maquinas ON telaPrincipal_maquina.id = telaPrincipal_maquinas.id
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
             telaPrincipal_estrutura.dataBaixaCaldSolda is not null
         AND
@@ -306,11 +312,13 @@ def index(request):
             telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_maquina.id As idMaquina
         FROM
-            telaPrincipal_estrutura INNER JOIN telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+            telaPrincipal_estrutura
+        INNER JOIN
+        telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         INNER JOIN
             telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
         INNER JOIN
-            telaPrincipal_maquinas ON telaPrincipal_maquina.id = telaPrincipal_maquinas.id
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
             telaPrincipal_estrutura.dataBaixaUsinagem is not null
         AND
