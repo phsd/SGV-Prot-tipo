@@ -552,7 +552,7 @@ def carregarEstruturas(request):
         INNER JOIN
             telaPrincipal_maquina ON telaPrincipal_maquinas.id = telaPrincipal_maquina.id_maquinas_id
         WHERE
-            telaPrincipal_maquina.id = '''+ idBusca +''';'''
+            telaPrincipal_maquina.id = '''+ idBusca +''' ORDER BY telaPrincipal_estruturas.nome;'''
     busca = models.Estrutura.objects.raw(b)
     return render(request, 'telaPrincipal/estruturas_dropdown_list_options.html', {'estruturas': busca})
 
