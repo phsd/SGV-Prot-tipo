@@ -8,6 +8,7 @@ from .forms import FormMaquina
 from .forms import FormEstrutura
 from .models import Estruturas, Maquina
 import math
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 
@@ -527,6 +528,7 @@ def formularioEstrutura(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
+            messages.success(request, 'CArtão adicionado com sucesso!')
             form = FormEstrutura()
         return render(request, 'telaPrincipal/formEstrutura.html', {'form': form})
     else:

@@ -27,6 +27,11 @@
                 <strong>Inserir Estrutura</strong> <small> (Novo Cartão no Quadro de Gestão a Vista)</small>
             </div>
             <div class="card-body card-block">
+              {% if messages %}
+                  {% for message in messages %}
+                    <div class="alert alert-success" role="alert">{{ message }}</div>
+                  {% endfor %}
+              {% endif %}
               <form method="POST" id="formEstrutura" dataCarregarEstruturasURL="{% url 'telaPrincipal:ajaxCarregarEstruturas' %}" dataCarregarPrazosEstrutura="{% url 'telaPrincipal:ajaxCarregarPrazosEstrutura' %}" class="form-row">
                 {% csrf_token %}
                 <div class="col-md-6">

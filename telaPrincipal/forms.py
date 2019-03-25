@@ -38,7 +38,9 @@ class FormEstrutura(forms.ModelForm):
                 idBusca = int(self.data.get('id_maquina'))
                 idMaquina = Maquina.objects.filter(id=idBusca)
                 for idm in idMaquina:
+                    print (idm.id_maquinas.id)
                     self.fields['id_estruturas'].queryset = Estruturas.objects.filter(id_maquinas=idm.id_maquinas.id)
+                    break;
             except (ValueError, TypeError):
                 print ("aqui4")
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
