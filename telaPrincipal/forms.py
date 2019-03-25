@@ -1,5 +1,5 @@
 from django import forms
-from .models import Maquina
+from .models import Maquina, Maquinas
 from .models import Estrutura
 from .models import Estruturas
 from tempus_dominus.widgets import DateTimePicker
@@ -21,7 +21,7 @@ class FormMaquina(forms.ModelForm):
 
 class FormEstrutura(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(FormEstrutura, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.form_class = 'form-group'
 
@@ -31,14 +31,20 @@ class FormEstrutura(forms.ModelForm):
         self.fields['prazopintura'].initial = 0
 
         self.fields['id_estruturas'].queryset = Estruturas.objects.none()
+
+
         if 'id_maquina' in self.data:
             try:
-                idMaquina = int(self.data.get('id_maquina'))
-                self.fields['id_estruturas'].queryset = Estruturas.objects.filter(id_maquinas=idMaquina).order_by('nome')
+                idBusca = int(self.data.get('id_maquina'))
+                idMaquina = Maquina.objects.filter(id=idBusca)
+                for idm in idMaquina:
+                    self.fields['id_estruturas'].queryset = Estruturas.objects.filter(id_maquinas=idm.id_maquinas.id)
             except (ValueError, TypeError):
+                print ("aqui4")
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance.pk:
-            self.fields['id_estruturas'].queryset = self.instance.id_maquina.id_estruturas_set.order_by('nome')
+            print ("aqui5")
+            self.fields['id_estruturas'].queryset = self.instance.id_maquina.id_estruturas_set
 
     class Meta:
         model = Estrutura

@@ -525,7 +525,6 @@ def formularioEstrutura(request):
     if request.method == "POST":
         form = FormEstrutura(request.POST)
         if form.is_valid():
-            print ("dadsa")
             post = form.save(commit=False)
             post.save()
             form = FormEstrutura()
