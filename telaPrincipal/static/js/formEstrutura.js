@@ -3,7 +3,7 @@ $("#id_id_maquina").change(function () {
   var idMaquina = $(this).val();  // get the selected country ID from the HTML input
   $.ajax({                       // initialize an AJAX request
     cache: false,
-    dataType: "json",
+    contentType: "application/json; charset=utf-8",
     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
     data: {
       'id_maquina': idMaquina       // add the country id to the GET parameters
@@ -19,7 +19,7 @@ $("#id_id_estruturas").change(function () {
   var id_estrutura = $(this).val();  // get the selected country ID from the HTML input
   $.ajax({                       // initialize an AJAX request
     cache: false,
-    dataType: "json",
+    contentType: "application/json; charset=utf-8",
     url: url,
     data: {
       'id_estrutura': id_estrutura
