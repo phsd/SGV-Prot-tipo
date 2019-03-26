@@ -427,7 +427,7 @@ def maquina(request, id_maquina, id_estrutura):
         INNER JOIN
             telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
         INNER JOIN
-            telaPrincipal_maquinas ON telaPrincipal_maquina.id = telaPrincipal_maquinas.id
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
             telaPrincipal_estrutura.id_maquina_id = '''+ id_maquina +''';'''
     busca = models.Estrutura.objects.raw(b)
