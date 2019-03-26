@@ -89,9 +89,10 @@ body {
 .grupocartao .cartao{
   justify-content: center;
   align-items: center;
+  text-align: center;
   font-size: 1.5vh;
   height: 8.75vh;
-  width: 8.2vh;
+  width: 8.3vh;
   margin-top:0.5vh;
   margin-right:0.5vh;
 }
