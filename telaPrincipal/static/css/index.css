@@ -89,7 +89,6 @@ body {
 .grupocartao .cartao{
   justify-content: center;
   align-items: center;
-  text-align: center;
   font-size: 1.5vh;
   height: 8.75vh;
   width: 8.3vh;
@@ -124,9 +123,13 @@ body {
 }
 .grupocartao .cartaoforadoprazodeentrega3 {
   background-color: Red;
+  color: white;
 }
-.grupocartao .cartaoforadoprazodeentrega1 a, .grupocartao .cartaoforadoprazodeentrega2 a, .grupocartao .cartaoforadoprazodeentrega3 a{ /*paliativo*/
+.grupocartao .cartaoforadoprazodeentrega1 a, .grupocartao .cartaoforadoprazodeentrega2 a{ /*paliativo*/
   color: black;
+}
+.grupocartao .cartaoforadoprazodeentrega3 a{ /*paliativo*/
+  color: white;
 }
 .wrapper .grupocartaonoprazo .grupomais {
   position: absolute;
@@ -145,4 +148,6 @@ body {
 }
 .grupocartao .mais{
   font-size: 4vh;
+  padding-left: 1.4vh;
+  padding-top: 1vh;
 }
