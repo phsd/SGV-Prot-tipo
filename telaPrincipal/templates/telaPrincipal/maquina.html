@@ -45,7 +45,6 @@
     }
     .wrapper .wrapper1 {
       font-weight: 600;
-      border: 1px solid #008080;
       padding-top: 0.2vh;
       padding-left: 0.3vh;
       color: black;
@@ -113,7 +112,7 @@
           </div>
         </div> <!--class estrutura-->
         <div class="wrapper"  style="-ms-grid-row:{{forloop.counter}}; -ms-grid-column:2;">
-          <div class="wrapper1 {{ e.20 }} wrapper11" style="-ms-grid-row:1; -ms-grid-column:1;">Programado:</div>
+          <div class="wrapper1  wrapper11" style="-ms-grid-row:1; -ms-grid-column:1;">Programado:</div>
           <div class="wrapper2"style="-ms-grid-row:1; -ms-grid-column:2;">
             <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.2 }}), 7vh); -ms-grid-column:1; -ms-grid-row: 1;">
               <div class="menu {{ e.20 }}" style="-ms-grid-row: 1; grid-column: 1/-1; -ms-grid-column-span: {{e.2}};">
@@ -179,7 +178,7 @@
           </div> <!--class wrapper2-->
 
 
-          <div class="wrapper1 {{ e.20 }}" style="-ms-grid-row:2; -ms-grid-column:1;">Executado:</div>
+          <div class="wrapper1" style="-ms-grid-row:2; -ms-grid-column:1;">Executado:</div>
           <div class="wrapper2" style="-ms-grid-row:2; -ms-grid-column:2;">
             {% if e.12 > 0 %}
               <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.12 }}),7vh); -ms-grid-column:1; -ms-grid-row: 1;">
