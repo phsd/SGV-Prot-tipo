@@ -371,7 +371,7 @@ def index(request):
 
 def maquina(request, id_maquina, id_estrutura):
     def calendProcesso1(inicio, numdias):
-        if numdias >=0:
+        if numdias >0:
             diasProcesso = []
             diasUteis = 0
             if inicio.hour > 12:
