@@ -85,7 +85,7 @@ def index(request):
             print (b.dataEntregaMax)
             posicaoGestaoaVista = subtrairdatas(datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0), dataPrazoMaxProcesso)#NÃO MEXER
             if posicaoGestaoaVista >= 0:
-                diasNecessarios = subtrairdatasuteis(dataPrazoMaxProcesso, datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0))
+                diasNecessarios = subtrairdatasuteis(datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0), dataPrazoMaxProcesso)
             else:
                 diasNecessarios = 0
             if processo == "corte":
@@ -100,10 +100,7 @@ def index(request):
             print (diasNecessarios)
 
             if datetime.datetime.now() > b.dataInicioProcesso:
-                if datetime.datetime.now() <= dataPrazoMaxProcesso:
-                    dataEntregaEstimada = somadiasuteis(datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
-                else:
-                    dataEntregaEstimada = somadiasuteis(dataPrazoMaxProcesso.replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
+                dataEntregaEstimada = somadiasuteis(datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
             else:
                 dataEntregaEstimada = somadiasuteis(b.dataInicioProcesso, diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
             print (dataEntregaEstimada)
