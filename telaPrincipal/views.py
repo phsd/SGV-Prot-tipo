@@ -85,7 +85,7 @@ def index(request):
             print (b.dataEntregaMax)
             posicaoGestaoaVista = subtrairdatas(datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0), dataPrazoMaxProcesso)#NÃO MEXER
             if posicaoGestaoaVista >= 0:
-                diasNecessarios = subtrairdatasuteis(datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0), dataPrazoMaxProcesso)
+                diasNecessarios = subtrairdatasuteis(dataPrazoMaxProcesso, datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0))
             else:
                 diasNecessarios = 0
             if processo == "corte":
