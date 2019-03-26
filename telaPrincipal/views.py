@@ -100,7 +100,10 @@ def index(request):
             print (diasNecessarios)
 
             if datetime.datetime.now() > b.dataInicioProcesso:
-                dataEntregaEstimada = somadiasuteis(datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
+                if datetime.datetime.now() <= dataPrazoMaxProcesso:
+                    dataEntregaEstimada = somadiasuteis(datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
+                else:
+                    dataEntregaEstimada = somadiasuteis(dataPrazoMaxProcesso.replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
             else:
                 dataEntregaEstimada = somadiasuteis(b.dataInicioProcesso, diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
             print (dataEntregaEstimada)
