@@ -51,6 +51,9 @@
       color: black;
       font-size: 1.6vh;
       margin-left: 1vh;
+      min-height: 8vh;
+    }
+    .wrapper .wrapper11 {
       margin-bottom: 1vh;
     }
     .wrapper .wrapper2 {
@@ -106,11 +109,11 @@
           Estrutura: {{e.1}}<br/ >
           MO: {{ e.0 }}
           <div style="text-align: center;">
-            <img src="{% static 'images/estrutura.png' %}" />
+              <img src="{% static 'images/estrutura.png' %}" style="width: 15vh;" />
           </div>
         </div> <!--class estrutura-->
         <div class="wrapper"  style="-ms-grid-row:{{forloop.counter}}; -ms-grid-column:2;">
-          <div class="wrapper1 {{ e.20 }}" style="-ms-grid-row:1; -ms-grid-column:1;">Programado:</div>
+          <div class="wrapper1 {{ e.20 }} wrapper11" style="-ms-grid-row:1; -ms-grid-column:1;">Programado:</div>
           <div class="wrapper2"style="-ms-grid-row:1; -ms-grid-column:2;">
             <div class="linhadotempo" style="grid-template-columns: repeat(calc({{ e.2 }}), 7vh); -ms-grid-column:1; -ms-grid-row: 1;">
               <div class="menu {{ e.20 }}" style="-ms-grid-row: 1; grid-column: 1/-1; -ms-grid-column-span: {{e.2}};">
