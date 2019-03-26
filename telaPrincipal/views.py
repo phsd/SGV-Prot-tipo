@@ -39,7 +39,7 @@ def subtrairdatasuteis (inicio, fim):
                 diasUteis = diasUteis + 1
             if (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0) >= fim.replace(hour=23, minute=59, second=59, microsecond=0):
                 break;
-        return (diasUteis)
+        return ((-1) *diasUteis)
     elif fim < inicio:
         if fim.hour > 12:
             fim = fim + timedelta(days = 1)
@@ -80,6 +80,9 @@ def index(request):
 
         for b in busca:
             dataPrazoMaxProcesso = somadiasuteis(b.dataInicioProcesso, (b.prazoPadraoProcesso + b.prazoProcesso)).replace(hour=23, minute=59, second=59, microsecond=0)#NÃO MEXER
+            print (b.ordemproducao)
+            print (b.dataInicioProcesso)
+            print (b.dataEntregaMax)
             posicaoGestaoaVista = subtrairdatas(datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0), dataPrazoMaxProcesso)#NÃO MEXER
             if posicaoGestaoaVista >= 0:
                 diasNecessarios = subtrairdatasuteis(dataPrazoMaxProcesso, datetime.datetime.now().replace(hour=23, minute=59, second=59, microsecond=0))
@@ -94,14 +97,20 @@ def index(request):
             elif processo == "Pintura":
                 diasNecessarios = diasNecessarios
 
+            print (diasNecessarios)
+
             if datetime.datetime.now() > b.dataInicioProcesso:
                 dataEntregaEstimada = somadiasuteis(datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0), diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
             else:
                 dataEntregaEstimada = somadiasuteis(b.dataInicioProcesso, diasNecessarios).replace(hour=23, minute=59, second=0, microsecond=0)
+            print (dataEntregaEstimada)
             if posicaoGestaoaVista >= 0:
+                print ("aqui1")
                 diasDisponiveis = subtrairdatasuteis(b.dataEntregaMax.replace(tzinfo=None), dataEntregaEstimada)
             else:
+                print ("aqui2")
                 diasDisponiveis = subtrairdatas(dataEntregaEstimada, b.dataEntregaMax.replace(tzinfo=None)) - 1
+            print (diasDisponiveis)
             if diasDisponiveis > 0:
                 estiloCSSCartaonoPrazodeEntrega = "cartaonoprazodeentrega"
             elif diasDisponiveis > -5:
@@ -362,23 +371,27 @@ def index(request):
 
 def maquina(request, id_maquina, id_estrutura):
     def calendProcesso1(inicio, numdias):
-        diasProcesso = []
-        diasUteis = 0
-        if inicio.hour > 12:
-            inicio = inicio + timedelta(days = 1)
-            inicio = inicio.replace(hour=0, minute=0, second=0, microsecond=0)
-        for n in range (0, numdias * 2):
-            if (inicio + timedelta(n)).weekday() != 6:
-                diasUteis = diasUteis + 1
-                diasProcesso.append([diasUteis, (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
-            else:
-                if n > 0:
-                    diasProcesso.append(["Dom", (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
-            if diasUteis >= numdias:
-                break;
-        if (inicio + timedelta(n + 1)).weekday() == 6:
-            diasProcesso.append(["Dom", (inicio + timedelta(n+1)).replace(hour=23, minute=59, second=59, microsecond=0)])
-        return(diasProcesso)
+        if numdias >=0:
+            diasProcesso = []
+            diasUteis = 0
+            if inicio.hour > 12:
+                inicio = inicio + timedelta(days = 1)
+                inicio = inicio.replace(hour=0, minute=0, second=0, microsecond=0)
+            for n in range (0, numdias * 2):
+                if (inicio + timedelta(n)).weekday() != 6:
+                    diasUteis = diasUteis + 1
+                    diasProcesso.append([diasUteis, (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
+                else:
+                    if n > 0:
+                        diasProcesso.append(["Dom", (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
+                if diasUteis >= numdias:
+                    break;
+            if (inicio + timedelta(n + 1)).weekday() == 6:
+                diasProcesso.append(["Dom", (inicio + timedelta(n+1)).replace(hour=23, minute=59, second=59, microsecond=0)])
+            return(diasProcesso)
+        else:
+            print (numdias)
+            return ()
 
     def calendProcesso2(inicio, fim1, prazoMaxProcesso):
         if fim1 == "agora":
@@ -454,7 +467,7 @@ def maquina(request, id_maquina, id_estrutura):
         diasProcesso = calendProcesso1(diasProcesso[-1][1], b.prazopadraopintura + b.prazopintura)
         estrutura.append(len(diasProcesso)) #8
         estrutura.append(diasProcesso) #9
-        diasProcesso = calendProcesso1(diasProcesso[-1][1], subtrairdatasuteis(diasProcesso[-1][1], b.dataEntregaMax))
+        diasProcesso = calendProcesso1(diasProcesso[-1][1], subtrairdatasuteis(b.dataEntregaMax, diasProcesso[-1][1]))
         estrutura.append(len(diasProcesso)) #10
         estrutura.append(diasProcesso) #11
 
