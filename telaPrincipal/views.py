@@ -529,7 +529,7 @@ def maquina(request, id_maquina, id_estrutura):
     }
     return render (request, "telaPrincipal/maquina.html", contexto)
 
-@login_required
+#@login_required
 def formularioMaquina(request):
     if request.method == "POST":
         form = FormMaquina(request.POST)
@@ -542,7 +542,7 @@ def formularioMaquina(request):
         form = FormMaquina()
         return render(request, 'telaPrincipal/formMaquina.html', {'form': form})
 
-@login_required
+#@login_required
 def formularioEstrutura(request):
     if request.method == "POST":
         form = FormEstrutura(request.POST)
