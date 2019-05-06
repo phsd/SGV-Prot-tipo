@@ -621,6 +621,7 @@ def hourlySchedManag2(request, local, mes, ano):
 
     horariosEstruturas = []
 
+
     b = '''SELECT
             telaPrincipal_Locais.id, telaPrincipal_Locais.nome
         FROM
