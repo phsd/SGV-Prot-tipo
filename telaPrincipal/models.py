@@ -1,6 +1,6 @@
 from django.db import models
 
-class Locais (models.Model):
+class locais (models.Model):
     id_setor = models.ForeignKey('Setores', on_delete=models.PROTECT)
     nome = models.CharField(
         max_length=50,
@@ -94,13 +94,13 @@ class Setores (models.Model):
     )
 
 class HourlyScheduleManagement (models.Model):
-    id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
+    id_local = models.ForeignKey('locais', on_delete=models.PROTECT)
     id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
     diaeHoraSaida = models.DateTimeField(null=True, blank=True)
 
 class HourlyScheduleManagementRealizado (models.Model):
-    id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
+    id_local = models.ForeignKey('locais', on_delete=models.PROTECT)
     id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
     diaeHoraSaida = models.DateTimeField(null=True, blank=True)
