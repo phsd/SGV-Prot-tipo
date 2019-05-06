@@ -5,15 +5,20 @@ import calendar
 from . import models
 import pytz
 from .forms import FormMaquina
-from .forms import FormEstrutura
+from .forms import FormEstrutura, FormScheduleManagement, FormHourlySchedManag1
 from .models import Estruturas, Maquina
 import math
 from django.contrib import messages
+import calendar
+
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
 
 def somadiasuteis(inicio, numdias):
     diasUteis = 0
+    n = 0
     if inicio.hour > 12:
         inicio = inicio + timedelta(days = 1)
     for n in range (0, (numdias * 2)):
@@ -585,3 +590,230 @@ def carregarPrazosEstrutura(request):
         return render(request, 'telaPrincipal/prazosEstrutura.json', {'prazos': prazos})
     else:
         return render(request, 'telaPrincipal/prazosEstrutura.json', {'prazos': "empty"})
+
+def hourlySchedManag1(request):
+    if request.method == "POST":
+        form = FormHourlySchedManag1(request.POST)
+        if form.is_valid():
+            url = reverse('telaPrincipal:urlHourlySchedManag2', kwargs={'local': request.POST['id_local'], 'mes': request.POST['mes'], 'ano': request.POST['ano']})
+            return HttpResponseRedirect(url)
+    else:
+        form = FormHourlySchedManag1()
+        return render(request, 'telaPrincipal/hourlySchedManag1.html', {'form': form})
+
+def hourlySchedManag2(request, local, mes, ano):
+    nomeLocal = local
+    nomesMes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+    anoExibicao = int(ano)
+    mesExibicao = int(mes)
+    cal = calendar.Calendar()
+    diasdoMes = []
+    horasdoDia = []
+    for x in range(0, 24):
+        horasdoDia.append(timedelta(hours=x))
+    mesExibicao = datetime.date(year=anoExibicao, month=mesExibicao, day=1)
+
+    dataInicialMes = mesExibicao.replace(day=1)
+    for dia in cal.itermonthdays(mesExibicao.year, mesExibicao.month):
+        if dia > 0:
+            diasdoMes.append(dia)
+            dataFinalMes = mesExibicao.replace(day=dia)
+
+    horariosEstruturas = []
+
+    b = '''SELECT
+            telaPrincipal_locais.id, telaPrincipal_locais.nome
+        FROM
+            telaPrincipal_locais
+        WHERE
+            telaPrincipal_locais.id = ''' + local + ''';'''
+    busca = models.Estrutura.objects.raw(b)
+    for b in busca:
+        nomeLocal = b.nome
+
+    b = '''SELECT
+            telaPrincipal_hourlyschedulemanagement.id, telaPrincipal_estrutura.id, telaPrincipal_estruturas.id,
+            telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada, telaPrincipal_hourlyschedulemanagement.diaeHoraSaida,
+            telaPrincipal_estrutura.ordemproducao, telaPrincipal_estruturas.nome
+        FROM
+            telaPrincipal_hourlyschedulemanagement
+        INNER JOIN
+            telaPrincipal_estrutura ON telaPrincipal_hourlyschedulemanagement.id_estrutura_id = telaPrincipal_estrutura.id
+        INNER JOIN
+			telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        WHERE
+            telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada >= \'''' + dataInicialMes.strftime("%Y-%m-%d") + '''\'
+		AND
+			telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + '''\'
+        AND
+            telaPrincipal_hourlyschedulemanagement.id_local_id =''' + local + '''
+		ORDER BY telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada;'''
+    busca = models.Estrutura.objects.raw(b)
+    for b in busca:
+        if (b.diaeHoraEntrada.day == b.diaeHoraSaida.day):
+            posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
+            if (b.diaeHoraEntrada.minute > 15):
+                posicaoInicial = posicaoInicial + 1
+            if (b.diaeHoraEntrada.minute > 45):
+                posicaoInicial = posicaoInicial + 1
+
+            posicaoFinal = (b.diaeHoraSaida.hour * 2) + 2
+            if (b.diaeHoraSaida.minute > 15):
+                posicaoFinal = posicaoFinal + 1
+            if (b.diaeHoraSaida.minute > 45):
+                posicaoFinal = posicaoFinal + 1
+            posicaoFinal = posicaoFinal - posicaoInicial
+            horarioEstrutura = [b.diaeHoraEntrada.day, b.nome, "", b.ordemproducao, posicaoInicial, posicaoFinal]
+            horariosEstruturas.append(horarioEstrutura)
+        else:
+            posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
+            if (b.diaeHoraEntrada.minute > 15):
+                posicaoInicial = posicaoInicial + 1
+            if (b.diaeHoraEntrada.minute > 45):
+                posicaoInicial = posicaoInicial + 1
+
+            posicaoFinal = 50 - posicaoInicial
+            horarioEstrutura = [b.diaeHoraEntrada.day, b.nome, "", b.ordemproducao, posicaoInicial, posicaoFinal]
+            horariosEstruturas.append(horarioEstrutura)
+
+            posicaoInicial = 2
+
+            posicaoFinal = (b.diaeHoraSaida.hour * 2) + 2
+            if (b.diaeHoraSaida.minute > 15):
+                posicaoFinal = posicaoFinal + 1
+            if (b.diaeHoraSaida.minute > 45):
+                posicaoFinal = posicaoFinal + 1
+            posicaoFinal = posicaoFinal - posicaoInicial
+            horarioEstrutura = [b.diaeHoraSaida.day, "", "", "- cont", posicaoInicial, posicaoFinal]
+            horariosEstruturas.append(horarioEstrutura)
+
+    horariosEstruturasRealizado = []
+    coresCaneta = ['Aqua', 'Chartreuse', 'Fuchsia', 'Gold']
+    corCaneta = 0
+
+    graficoHorasDia=[]
+    graficoHorasMes=[]
+
+    if (datetime.datetime.today().year == anoExibicao and datetime.datetime.today().month == mesExibicao.month):
+        for b in range (0, datetime.datetime.today().day):
+            graficoHorasDia.append(0)
+    else:
+        for dia in cal.itermonthdays(mesExibicao.year, mesExibicao.month):
+            if dia > 0:
+                graficoHorasDia.append(0)
+
+    if (datetime.datetime.today().year == anoExibicao):
+        for b in range (0, datetime.datetime.today().month):
+            graficoHorasMes.append(0)
+    else:
+        for dia in range(0,12):
+            graficoHorasMes.append(0)
+
+    b = '''SELECT
+            telaPrincipal_hourlyschedulemanagementRealizado.id, telaPrincipal_estrutura.id, telaPrincipal_estruturas.id,
+            telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada, telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraSaida,
+            telaPrincipal_estrutura.ordemproducao, telaPrincipal_estruturas.nome
+        FROM
+            telaPrincipal_hourlyschedulemanagementRealizado
+        INNER JOIN
+            telaPrincipal_estrutura ON telaPrincipal_hourlyschedulemanagementRealizado.id_estrutura_id = telaPrincipal_estrutura.id
+        INNER JOIN
+			telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        WHERE
+            telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada >= \'''' + dataInicialMes.strftime("%Y-%m-%d") + '''\'
+		AND
+			telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + '''\'
+        AND
+            telaPrincipal_hourlyschedulemanagementRealizado.id_local_id =''' + local + '''
+		ORDER BY telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada;'''
+    busca = models.Estrutura.objects.raw(b)
+    for b in busca:
+        corCaneta = corCaneta + 1
+        if (corCaneta > 3):
+            corCaneta = 0
+
+        if (b.diaeHoraEntrada.day == b.diaeHoraSaida.day):
+            diferenca = b.diaeHoraSaida - b.diaeHoraEntrada
+            hora = graficoHorasDia.pop(b.diaeHoraEntrada.day-1)
+            graficoHorasDia.insert(b.diaeHoraEntrada.day-1, hora + diferenca.total_seconds() * 1000)
+
+            hora2 = graficoHorasMes.pop(b.diaeHoraEntrada.month-1)
+            graficoHorasMes.insert(b.diaeHoraEntrada.month-1, hora2 + diferenca.total_seconds() * 1000)
+
+
+            posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
+            if (b.diaeHoraEntrada.minute > 15):
+                posicaoInicial = posicaoInicial + 1
+            if (b.diaeHoraEntrada.minute > 45):
+                posicaoInicial = posicaoInicial + 1
+
+            posicaoFinal = (b.diaeHoraSaida.hour * 2) + 2
+            if (b.diaeHoraSaida.minute > 15):
+                posicaoFinal = posicaoFinal + 1
+            if (b.diaeHoraSaida.minute > 45):
+                posicaoFinal = posicaoFinal + 1
+            posicaoFinal = posicaoFinal - posicaoInicial
+            horarioEstruturaRealizado = [b.diaeHoraEntrada.day, b.nome, coresCaneta[corCaneta], b.ordemproducao, posicaoInicial, posicaoFinal]
+            horariosEstruturasRealizado.append(horarioEstruturaRealizado)
+        else:
+            diferenca = b.diaeHoraEntrada.replace(hour=23, minute=59, second=59) - b.diaeHoraEntrada
+            hora = graficoHorasDia.pop(b.diaeHoraEntrada.day-1)
+            graficoHorasDia.insert(b.diaeHoraEntrada.day-1, hora + diferenca.total_seconds() * 1000)
+
+            hora2 = graficoHorasMes.pop(b.diaeHoraEntrada.month-1)
+            graficoHorasMes.insert(b.diaeHoraEntrada.month-1, hora2 + diferenca.total_seconds() * 1000)
+
+            posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
+            if (b.diaeHoraEntrada.minute > 15):
+                posicaoInicial = posicaoInicial + 1
+            if (b.diaeHoraEntrada.minute > 45):
+                posicaoInicial = posicaoInicial + 1
+
+            posicaoFinal = 50 - posicaoInicial
+            horarioEstruturaRealizado = [b.diaeHoraEntrada.day, b.nome, coresCaneta[corCaneta], b.ordemproducao, posicaoInicial, posicaoFinal]
+            horariosEstruturasRealizado.append(horarioEstruturaRealizado)
+
+            diferenca = b.diaeHoraSaida - b.diaeHoraSaida.replace(hour=0, minute=0, second=0)
+            hora = graficoHorasDia.pop(b.diaeHoraSaida.day-1)
+            graficoHorasDia.insert(b.diaeHoraSaida.day-1, hora + diferenca.total_seconds() * 1000)
+
+            hora2 = graficoHorasMes.pop(b.diaeHoraEntrada.month-1)
+            graficoHorasMes.insert(b.diaeHoraEntrada.month-1, hora2 + diferenca.total_seconds() * 1000)
+
+            posicaoInicial = 2
+            posicaoFinal = (b.diaeHoraSaida.hour * 2) + 2
+            if (b.diaeHoraSaida.minute > 15):
+                posicaoFinal = posicaoFinal + 1
+            if (b.diaeHoraSaida.minute > 45):
+                posicaoFinal = posicaoFinal + 1
+            posicaoFinal = posicaoFinal - posicaoInicial
+            horarioEstruturaRealizado = [b.diaeHoraSaida.day, "", coresCaneta[corCaneta], "- cont", posicaoInicial, posicaoFinal]
+            horariosEstruturasRealizado.append(horarioEstruturaRealizado)
+
+
+    hora2 = graficoHorasMes.pop(mesExibicao.month-1) / len(graficoHorasDia)
+    graficoHorasMes.insert(mesExibicao.month-1, hora2)
+    contexto = {
+        'diasdoMes': diasdoMes,
+        'horasdoDia': horasdoDia,
+        'horariosEstruturas': horariosEstruturas,
+        'horariosEstruturasRealizado': horariosEstruturasRealizado,
+        'graficoHorasDia': graficoHorasDia,
+        'graficoHorasMes': graficoHorasMes,
+        'nomeLocal': nomeLocal,
+        'mes': nomesMes[int(mes)-1],
+        'ano': ano,
+    }
+    return render (request, "telaPrincipal/hourlySchedManag2.html", contexto)
+
+def formularioHourlySchedManag(request):
+    if request.method == "POST":
+        form = FormScheduleManagement(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+        form = FormScheduleManagement()
+        return render(request, 'telaPrincipal/formHourlySchedManag.html', {'form': form})
+    else:
+        form = FormScheduleManagement()
+        return render(request, 'telaPrincipal/formHourlySchedManag.html', {'form': form})

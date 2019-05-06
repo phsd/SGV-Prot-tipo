@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'telaPrincipal',
     'crispy_forms',
-    'tempus_dominus',
-    'telaPrincipal'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

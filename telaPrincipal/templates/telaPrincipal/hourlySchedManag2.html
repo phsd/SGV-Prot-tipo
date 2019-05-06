@@ -1,0 +1,233 @@
+{% extends 'telaPrincipal/base.html' %}
+{% load static %}
+{% load tag_extras %}
+
+{% block title %}Hourly Schedule Management{% endblock %}
+{% block h1Pagina %}Hourly Schedule Management - {{nomeLocal}}: {{mes}}\{{ano}}{% endblock %}
+{% block content %}
+<style>
+  .wrapper {
+    display: grid;
+    border-left: 1px solid Gainsboro;
+    border-top: 1px solid Gainsboro;
+    margin-left: 1vh;
+    margin-right: 1vh;
+    margin-top: 0.8vh;
+    grid-template-rows: 8fr{% for j in diasdoMes %} 4fr{% endfor %};
+    -ms-grid-rows: 8fr{% for j in diasdoMes %} 4fr{% endfor %};
+    background-color: white;
+    grid-template-columns: 12fr repeat(48, 6fr);
+    -ms-grid-columns: 12fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr 6fr;
+    display: -ms-grid;
+    -ms-grid-rows: 8fr;
+  }
+  .divHora, .divHora2{
+    display: flex;
+    border-right: 1px solid Gainsboro;
+    border-bottom: 1px solid Gainsboro;
+    justify-content: center;
+    align-items: center;
+  }
+  .divHora2 {
+    border: 1px solid gray;
+  }
+  .divHoraPrimMeiaHora {
+    border-right: 0;
+  }
+  #flot-placeholder, #flot-placeholder2{
+    width:1fr;
+    height:50vh;
+    border: 1px solid Gainsboro;
+    background-color: white;
+    margin: 1vh;
+  }
+</style>
+  <div class="wrapper">
+    <div class="divHora" style="-ms-grid-row: 1; -ms-grid-column: 1">
+        Hora →<br />
+        Dia ↓
+    </div>
+    {% for i in horasdoDia %}
+      <div class="divHora" style="grid-column: {{ forloop.counter|add:forloop.counter }}/span 2 ;-ms-grid-row: 1; -ms-grid-column: {{ forloop.counter|add:forloop.counter }}; -ms-grid-column-span: 2;">
+        {{ i|smooth_timedelta }}
+      </div>
+    {% endfor %}
+    {% for j in diasdoMes %}
+      <div class="divHora" style="-ms-grid-row: {{forloop.counter|add:1}}; -ms-grid-column: 1">
+        {{ j }}
+      </div>
+      {% for i in horasdoDia %}
+        <div class="divHora divHoraPrimMeiaHora" id="dia{{j}}hora{{ forloop.counter|add:forloop.counter }}" style="-ms-grid-row: {{forloop.parentloop.counter|add:1}}; -ms-grid-column: {{ forloop.counter|add:forloop.counter }}">
+          &nbsp;
+        </div>
+        <div class="divHora" id="dia{{j}}hora{% with posicao=forloop.counter|add:forloop.counter %}{{posicao|add:1}}{% endwith %}" style="-ms-grid-row: {{forloop.parentloop.counter|add:1}}; -ms-grid-column: {% with posicao=forloop.counter|add:forloop.counter %}{{posicao|add:1}}{% endwith %}">
+          &nbsp;
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  <div id="flot-placeholder"></div>
+  <div id="flot-placeholder2"></div>
+{% endblock %}
+
+{% block arquivosJS %}
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      alturaCorreta = $("#dia1hora2").height();
+
+      {% for k in horariosEstruturas %}
+        $("#dia{{k.0}}hora{{k.4}}").replaceWith("<div style='-ms-grid-row: {{k.0|add:1}};-ms-grid-column: {{k.4}}; -ms-grid-column-span: {{k.5}}; grid-column: {{k.4}} / span {{ k.5 }};' class='divHora2' id='comeStrutdia{{k.0}}hora{{k.4}}'><span>{{k.3}} - {{k.1}}</span></div>");
+        cont = 0.1;
+        while ($("#comeStrutdia{{k.0}}hora{{k.4}}").height() > alturaCorreta) {
+          $("#comeStrutdia{{k.0}}hora{{k.4}}").css("line-height", "1");
+           $("#comeStrutdia{{k.0}}hora{{k.4}}").css("font-size", 1 - cont+"em");
+           cont = cont + 0.1;
+        }
+        {% for l in l|rjust:k.5 %}
+          {% if forloop.counter <= k.5 %}
+            $("#dia{{k.0}}hora{{k.4|add:forloop.counter0}}" ).remove();
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+
+      {% for k in horariosEstruturasRealizado %}
+        $("#dia{{k.0}}hora{{k.4}}").replaceWith("<div style='background-color: {{k.2}};-ms-grid-row: {{k.0|add:1}};-ms-grid-column: {{k.4}}; -ms-grid-column-span: {{k.5}}; grid-column: {{k.4}} / span {{ k.5 }};' class='divHora2' id='comeStrutdia{{k.0}}hora{{k.4}}'><span>{{k.3}} - {{k.1}}</span></div>");
+        cont = 0.1;
+        while ($("#comeStrutdia{{k.0}}hora{{k.4}}").height() > alturaCorreta) {
+          $("#comeStrutdia{{k.0}}hora{{k.4}}").css("line-height", "1");
+           $("#comeStrutdia{{k.0}}hora{{k.4}}").css("font-size", 1 - cont+"em");
+           cont = cont + 0.1;
+        }
+        {% for l in l|rjust:k.5 %}
+          {% if forloop.counter <= k.5 %}
+            $("#dia{{k.0}}hora{{k.4|add:forloop.counter0}}" ).remove();
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    });
+
+    var data = [[1, 50400000], [30, 50400000]];
+    var data2 = [
+      {% for i in graficoHorasDia %}
+        [{{forloop.counter}}, {{i}}],
+      {% endfor %}
+    ];
+
+    var dataset = [
+        {
+            label: "Meta do dia",
+            data: data,
+            color: "LawnGreen",
+            lines: { show: true }
+        },
+        {
+            label: "Média do dia",
+            data: data2,
+            color: "DodgerBlue",
+            points: { fillColor: "DodgerBlue", show: true },
+            lines: { show: true }
+        },
+
+    ];
+
+    var options = {
+        yaxis: {
+          mode: "time",
+          timeformat: "%h:%M",
+          ticks: [
+            {% for i in horasdoDia %}
+                [{{ forloop.counter0|horas_emmilisegundos }}],
+            {% endfor %}
+          ],
+        },
+        xaxis: {
+          tickDecimals: 0,
+          ticks: [
+            {% for j in diasdoMes %}
+                [{{ j }}],
+            {% endfor %}
+          ],
+        },
+
+        axisLabels: {
+          show: true
+        },
+        xaxes: [{
+          axisLabel: 'Dias do mês',
+        }],
+        yaxes: [
+          {
+            position: 'left',
+            axisLabel: 'Horas',
+          }
+        ]
+    };
+
+    $(document).ready(function () {
+        $.plot($("#flot-placeholder"), dataset, options);
+    });
+
+
+
+    var data3 = [[1, 46800000], [12, 46800000]];
+    var data4 = [
+      {% for i in graficoHorasMes %}
+        [{{forloop.counter}}, {{i}}],
+      {% endfor %}
+    ];
+
+    var dataset2 = [
+        {
+            label: "Meta do mês",
+            data: data3,
+            color: "LimeGreen",
+            lines: { show: true }
+        },
+        {
+            label: "Média do mês",
+            data: data4,
+            color: "Navy",
+            points: { fillColor: "Navy", show: true },
+            lines: { show: true }
+        },
+
+    ];
+
+    var options2 = {
+        yaxis: {
+          mode: "time",
+          timeformat: "%h:%M",
+          ticks: [
+            {% for i in horasdoDia %}
+                [{{ forloop.counter0|horas_emmilisegundos }}],
+            {% endfor %}
+          ],
+        },
+        xaxis: {
+          ticks: [[1, "Jan"],[2, "Feb"],[3, "Mar"],[4, "Abr"],[5, "Mai"],[6, "Jun"],[7, "Jul"],[8, "Ago"],[9, "Set"],[10, "Out"],[11, "Nov"],[12, "Dec"]],
+        },
+
+        axisLabels: {
+          show: true
+        },
+        xaxes: [{
+          axisLabel: 'Meses do ano',
+        }],
+        yaxes: [
+          {
+            position: 'left',
+            axisLabel: 'Horas',
+          }
+        ]
+    };
+
+    $(document).ready(function () {
+        $.plot($("#flot-placeholder2"), dataset2, options2);
+    });
+  </script>
+{% endblock %}
+
+<script type="text/javascript">
+
+</script>

@@ -1,0 +1,39 @@
+{% extends 'telaPrincipal/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Adicionar Máquina/Pacote{% endblock %}
+{% block h1Pagina %}Adicionar Máquina/Pacote{% endblock %}
+
+{% block breadcrumTextRight %}
+  <ol class="breadcrumb text-right">
+    <li style="text-transform:none;"><a href="{% url 'telaPrincipal:index' %}">Gestão a Vista</a></li>
+    <li class="active" style="text-transform:none;">Adicionar Máquina/Pacote</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  <div class="content mt-3">
+    <div class="card">
+      <div class="card-header">
+          <strong>Inserir Número de série de Máquina/Pacote</strong> <small> (Novo Conjunto de Cartões no Quadro de Gestão a Vista)</small>
+      </div>
+      <div class="card-body card-block">
+        <form method="POST" class="form-row">
+          {% csrf_token %}
+          <div class="col-md-4">
+            {{ form.id_local|as_crispy_field }}
+          </div>
+          <div class="col-md-4">
+            {{ form.mes|as_crispy_field }}
+          </div>
+          <div class="col-md-4">
+            {{ form.ano|as_crispy_field }}
+          </div>
+          <div class="col-12 text-center"><button type="submit" class="btn btn-info">Ok</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

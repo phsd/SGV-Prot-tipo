@@ -75,3 +75,32 @@ class Estrutura (models.Model):
     dataBaixaUsinagem = models.DateTimeField(null=True, blank=True)
     dataBaixaPintura = models.DateTimeField(null=True, blank=True)
     dataConfirmEntrega = models.DateTimeField(null=True, blank=True)
+
+class Setores (models.Model):
+    nome = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False
+    )
+
+class Locais (models.Model):
+    id_setor = models.ForeignKey('Setores', on_delete=models.PROTECT)
+    nome = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False
+    )
+    def __str__(self):
+        return self.nome
+
+class HourlyScheduleManagement (models.Model):
+    id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
+    id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
+    diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
+    diaeHoraSaida = models.DateTimeField(null=True, blank=True)
+
+class HourlyScheduleManagementRealizado (models.Model):
+    id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
+    id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
+    diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
+    diaeHoraSaida = models.DateTimeField(null=True, blank=True)

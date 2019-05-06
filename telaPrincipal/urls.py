@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^ajax/carregarPrazosEstrutura/', views.carregarPrazosEstrutura, name='ajaxCarregarPrazosEstrutura'),
     url('accounts/login/', auth_views.LoginView.as_view(), name='loginForm'),
     url('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    url(r'^HourlyScheduleManagement1', views.hourlySchedManag1, name='urlHourlySchedManag1'),
+    url(r'^HourlyScheduleManagement2/(?P<local>[-\w]+)/(?P<mes>[-\w]+)/(?P<ano>[-\w]+)/$', views.hourlySchedManag2, name='urlHourlySchedManag2'),
+    url(r'^formHourlyScheduleManagement', views.formularioHourlySchedManag, name='urlFormHourlySchedManag'),
 ]
