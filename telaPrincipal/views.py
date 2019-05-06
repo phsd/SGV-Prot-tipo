@@ -599,7 +599,7 @@ def hourlySchedManag1(request):
             return HttpResponseRedirect(url)
     else:
         form = FormHourlySchedManag1()
-        return render(request, 'telaPrincipal/hourlySchedManag1.html', {'form': form})
+        return render(request, 'telaPrincipal/hourlySchedManag1.html')
 
 def hourlySchedManag2(request, local, mes, ano):
     nomeLocal = local
