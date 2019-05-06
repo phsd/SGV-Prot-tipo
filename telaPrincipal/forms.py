@@ -62,7 +62,7 @@ class FormEstrutura(forms.ModelForm):
         }
 
 LOCAIS = []
-busca = Locais.objects.filter()
+busca = locais.objects.filter()
 for b in busca:
     LOCAIS.append([b.id, b.nome])
 
