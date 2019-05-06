@@ -83,7 +83,8 @@ class Setores (models.Model):
         blank=False
     )
 
-class locais (models.Model):
+
+class Locais (models.Model):
     id_setor = models.ForeignKey('Setores', on_delete=models.PROTECT)
     nome = models.CharField(
         max_length=50,

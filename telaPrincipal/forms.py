@@ -3,7 +3,7 @@ from .models import Maquina, Maquinas
 from .models import Estrutura
 from .models import Estruturas
 from .models import HourlyScheduleManagement
-from .models import locais
+from .models import Locais
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
@@ -61,10 +61,10 @@ class FormEstrutura(forms.ModelForm):
             'prazopintura': 'Dias para Pintura:',
         }
 
-LOCAIS = []
-busca = locais.objects.filter()
+LOCAISLIST = []
+busca = Locais.objects.filter()
 for b in busca:
-    LOCAIS.append([b.id, b.nome])
+    LOCAISLIST.append([b.id, b.nome])
 
 MES = [
     ('1', 'Janeiro'),
@@ -92,7 +92,7 @@ class FormHourlySchedManag1(forms.Form):
 
         self.fields['id_local'].queryset = Estruturas.objects.none()
 
-    id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAIS))
+    id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAISLIST))
     mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES))
     ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO))
 

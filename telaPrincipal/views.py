@@ -6,7 +6,7 @@ from . import models
 import pytz
 from .forms import FormMaquina
 from .forms import FormEstrutura, FormScheduleManagement, FormHourlySchedManag1
-from .models import Estruturas, Maquina
+from .models import Estruturas, Maquina, Locais
 import math
 from django.contrib import messages
 import calendar
@@ -627,7 +627,7 @@ def hourlySchedManag2(request, local, mes, ano):
             telaPrincipal_locais
         WHERE
             telaPrincipal_locais.id = ''' + local + ''';'''
-    busca = models.Estrutura.objects.raw(b)
+    busca = models.Locais.objects.raw(b)
     for b in busca:
         nomeLocal = b.nome
 
