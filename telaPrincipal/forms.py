@@ -3,7 +3,7 @@ from .models import Maquina, Maquinas
 from .models import Estrutura
 from .models import Estruturas
 from .models import HourlyScheduleManagement
-from .models import Locais
+from .models import locais
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
