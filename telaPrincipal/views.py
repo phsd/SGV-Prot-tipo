@@ -622,11 +622,11 @@ def hourlySchedManag2(request, local, mes, ano):
     horariosEstruturas = []
 
     b = '''SELECT
-            telaPrincipal_locais.id, telaPrincipal_locais.nome
+            telaPrincipal_Locais.id, telaPrincipal_Locais.nome
         FROM
-            telaPrincipal_locais
+            telaPrincipal_Locais
         WHERE
-            telaPrincipal_locais.id = ''' + local + ''';'''
+            telaPrincipal_Locais.id = ''' + local + ''';'''
     busca = models.Locais.objects.raw(b)
     for b in busca:
         nomeLocal = b.nome
