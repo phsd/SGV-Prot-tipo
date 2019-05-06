@@ -1,5 +1,15 @@
 from django.db import models
 
+class Locais (models.Model):
+    id_setor = models.ForeignKey('Setores', on_delete=models.PROTECT)
+    nome = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False
+    )
+    def __str__(self):
+        return self.nome
+
 # Create your models here.
 class Maquinas (models.Model):
     nome = models.CharField(
@@ -82,16 +92,6 @@ class Setores (models.Model):
         null=False,
         blank=False
     )
-
-class Locais (models.Model):
-    id_setor = models.ForeignKey('Setores', on_delete=models.PROTECT)
-    nome = models.CharField(
-        max_length=50,
-        null=False,
-        blank=False
-    )
-    def __str__(self):
-        return self.nome
 
 class HourlyScheduleManagement (models.Model):
     id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
