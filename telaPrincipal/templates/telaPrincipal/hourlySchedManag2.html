@@ -164,13 +164,6 @@
         ]
     };
 
-    $(document).ready(function () {
-         $("#flot-placeholder").delay(1000);
-        $.plot($("#flot-placeholder"), dataset, options);
-    });
-
-
-
     var data3 = [[1, 46800000], [12, 46800000]];
     var data4 = [
       {% for i in graficoHorasMes %}
@@ -223,8 +216,9 @@
         ]
     };
 
-    $(document).ready(function () {
-        $.plot($("#flot-placeholder2"), dataset2, options2);
-    });
+    setTimeout(function() {
+      $.plot($("#flot-placeholder"), dataset, options);
+      $.plot($("#flot-placeholder2"), dataset2, options2);
+    }, 1000);
   </script>
 {% endblock %}
