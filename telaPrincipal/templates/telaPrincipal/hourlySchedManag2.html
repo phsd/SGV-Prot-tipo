@@ -107,7 +107,7 @@
       {% endfor %}
     });
 
-    var data = [[1, 50400000], [30, 50400000]];
+    var data = [{% for j in diasdoMes %} [{{forloop.counter}}, 50400000],{% endfor %}];
     var data2 = [
       {% for i in graficoHorasDia %}
         [{{forloop.counter}}, {{i}}],
