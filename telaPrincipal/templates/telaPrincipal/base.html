@@ -24,6 +24,17 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+
+    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'vendors/popper.js/dist/umd/popper.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+    <script src="{% static 'vendors/flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'vendors/flot/jquery.flot.axislabels.js' %}"></script>
+    <script src="{% static 'vendors/flot/jquery.flot.time.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pt-br.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
     {{ form.media }}
     <style>
         _:-ms-lang(x), #main-menu { width: 25vh;}
@@ -154,16 +165,6 @@
     </div><!-- /#right-panel -->
     <!-- Right Panel -->
 
-    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
-    <script src="{% static 'vendors/popper.js/dist/umd/popper.min.js' %}"></script>
-    <script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-
-    <script src="{% static 'vendors/flot/jquery.flot.js' %}"></script>
-    <script src="{% static 'vendors/flot/jquery.flot.axislabels.js' %}"></script>
-    <script src="{% static 'vendors/flot/jquery.flot.time.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pt-br.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
     {% block arquivosJS %}{% endblock %}
     <script type="text/javascript">
       jQuery(document).ready(function($) {
