@@ -108,118 +108,116 @@
         {% endfor %}
       {% endfor %}
       $('body').toggleClass('open');
-    }, 1000);
 
-    var data = [{% for j in diasdoMes %} [{{forloop.counter}}, 50400000],{% endfor %}];
-    var data2 = [
-      {% for i in graficoHorasDia %}
-        [{{forloop.counter}}, {{i}}],
-      {% endfor %}
-    ];
+      var data = [{% for j in diasdoMes %} [{{forloop.counter}}, 50400000],{% endfor %}];
+      var data2 = [
+        {% for i in graficoHorasDia %}
+          [{{forloop.counter}}, {{i}}],
+        {% endfor %}
+      ];
 
-    var dataset = [
-        {
-            label: "Meta do dia",
-            data: data,
-            color: "LawnGreen",
-            lines: { show: true }
-        },
-        {
-            label: "Média do dia",
-            data: data2,
-            color: "DodgerBlue",
-            points: { fillColor: "DodgerBlue", show: true },
-            lines: { show: true }
-        },
-
-    ];
-
-    var options = {
-        yaxis: {
-          mode: "time",
-          timeformat: "%h:%M",
-          ticks: [
-            {% for i in horasdoDia %}
-                [{{ forloop.counter0|horas_emmilisegundos }}],
-            {% endfor %}
-          ],
-        },
-        xaxis: {
-          tickDecimals: 0,
-          ticks: [
-            {% for j in diasdoMes %}
-                [{{ j }}],
-            {% endfor %}
-          ],
-        },
-
-        axisLabels: {
-          show: true
-        },
-        xaxes: [{
-          axisLabel: 'Dias do mês',
-        }],
-        yaxes: [
+      var dataset = [
           {
-            position: 'left',
-            axisLabel: 'Horas',
-          }
-        ]
-    };
-
-    var data3 = [[1, 46800000], [12, 46800000]];
-    var data4 = [
-      {% for i in graficoHorasMes %}
-        [{{forloop.counter}}, {{i}}],
-      {% endfor %}
-    ];
-
-    var dataset2 = [
-        {
-            label: "Meta do mês",
-            data: data3,
-            color: "LimeGreen",
-            lines: { show: true }
-        },
-        {
-            label: "Média do mês",
-            data: data4,
-            color: "Navy",
-            points: { fillColor: "Navy", show: true },
-            lines: { show: true }
-        },
-
-    ];
-
-    var options2 = {
-        yaxis: {
-          mode: "time",
-          timeformat: "%h:%M",
-          ticks: [
-            {% for i in horasdoDia %}
-                [{{ forloop.counter0|horas_emmilisegundos }}],
-            {% endfor %}
-          ],
-        },
-        xaxis: {
-          ticks: [[1, "Jan"],[2, "Feb"],[3, "Mar"],[4, "Abr"],[5, "Mai"],[6, "Jun"],[7, "Jul"],[8, "Ago"],[9, "Set"],[10, "Out"],[11, "Nov"],[12, "Dec"]],
-        },
-
-        axisLabels: {
-          show: true
-        },
-        xaxes: [{
-          axisLabel: 'Meses do ano',
-        }],
-        yaxes: [
+              label: "Meta do dia",
+              data: data,
+              color: "LawnGreen",
+              lines: { show: true }
+          },
           {
-            position: 'left',
-            axisLabel: 'Horas',
-          }
-        ]
-    };
+              label: "Média do dia",
+              data: data2,
+              color: "DodgerBlue",
+              points: { fillColor: "DodgerBlue", show: true },
+              lines: { show: true }
+          },
 
-    setTimeout(function() {
+      ];
+
+      var options = {
+          yaxis: {
+            mode: "time",
+            timeformat: "%h:%M",
+            ticks: [
+              {% for i in horasdoDia %}
+                  [{{ forloop.counter0|horas_emmilisegundos }}],
+              {% endfor %}
+            ],
+          },
+          xaxis: {
+            tickDecimals: 0,
+            ticks: [
+              {% for j in diasdoMes %}
+                  [{{ j }}],
+              {% endfor %}
+            ],
+          },
+
+          axisLabels: {
+            show: true
+          },
+          xaxes: [{
+            axisLabel: 'Dias do mês',
+          }],
+          yaxes: [
+            {
+              position: 'left',
+              axisLabel: 'Horas',
+            }
+          ]
+      };
+
+      var data3 = [[1, 46800000], [12, 46800000]];
+      var data4 = [
+        {% for i in graficoHorasMes %}
+          [{{forloop.counter}}, {{i}}],
+        {% endfor %}
+      ];
+
+      var dataset2 = [
+          {
+              label: "Meta do mês",
+              data: data3,
+              color: "LimeGreen",
+              lines: { show: true }
+          },
+          {
+              label: "Média do mês",
+              data: data4,
+              color: "Navy",
+              points: { fillColor: "Navy", show: true },
+              lines: { show: true }
+          },
+
+      ];
+
+      var options2 = {
+          yaxis: {
+            mode: "time",
+            timeformat: "%h:%M",
+            ticks: [
+              {% for i in horasdoDia %}
+                  [{{ forloop.counter0|horas_emmilisegundos }}],
+              {% endfor %}
+            ],
+          },
+          xaxis: {
+            ticks: [[1, "Jan"],[2, "Feb"],[3, "Mar"],[4, "Abr"],[5, "Mai"],[6, "Jun"],[7, "Jul"],[8, "Ago"],[9, "Set"],[10, "Out"],[11, "Nov"],[12, "Dec"]],
+          },
+
+          axisLabels: {
+            show: true
+          },
+          xaxes: [{
+            axisLabel: 'Meses do ano',
+          }],
+          yaxes: [
+            {
+              position: 'left',
+              axisLabel: 'Horas',
+            }
+          ]
+      };
+
       $.plot($("#flot-placeholder"), dataset, options);
       $.plot($("#flot-placeholder2"), dataset2, options2);
     }, 1000);
