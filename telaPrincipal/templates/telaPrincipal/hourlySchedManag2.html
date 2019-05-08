@@ -107,6 +107,9 @@
           {% endif %}
         {% endfor %}
       {% endfor %}
+      $('#menuToggle').on('click', function(event) {
+        $('body').toggleClass('open');
+      });
     }, 1000);
 
     var data = [{% for j in diasdoMes %} [{{forloop.counter}}, 50400000],{% endfor %}];
