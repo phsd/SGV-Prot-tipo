@@ -75,7 +75,7 @@
 
 {% block arquivosJS %}
   <script type="text/javascript">
-    jQuery(document).ready(function($) {
+    setTimeout(function() {
       alturaCorreta = $("#dia1hora2").height();
 
       {% for k in horariosEstruturas %}
@@ -107,7 +107,7 @@
           {% endif %}
         {% endfor %}
       {% endfor %}
-    });
+    }, 1000);
 
     var data = [{% for j in diasdoMes %} [{{forloop.counter}}, 50400000],{% endfor %}];
     var data2 = [
