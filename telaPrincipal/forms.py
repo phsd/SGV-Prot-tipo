@@ -62,11 +62,11 @@ class FormEstrutura(forms.ModelForm):
             'prazopintura': 'Dias para Pintura:',
         }
 
-LOCAISLIST = []
-b = '''SELECT id, nome FROM telaPrincipal_locais;'''
-busca = Locais.objects.raw(b)
-for b in busca:
-    LOCAISLIST.append([b.id, b.nome])
+#LOCAISLIST = []
+#b = '''SELECT id, nome FROM telaPrincipal_locais;'''
+#busca = Locais.objects.raw(b)
+#for b in busca:
+#    LOCAISLIST.append([b.id, b.nome])
 
 MES = [
     ('1', 'Janeiro'),
@@ -92,11 +92,11 @@ class FormHourlySchedManag1(forms.Form):
         self.helper = FormHelper(self)
         self.helper.form_class = 'form-group'
 
-        self.fields['id_local'].queryset = Estruturas.objects.none()
+        self.fields['id_local'].queryset = Locais.objects.filter()
 
-        id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAISLIST))
-        mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES), initial=datetime.datetime.now().month)
-        ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO), initial=datetime.datetime.now().year)
+    #id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAISLIST))
+    #mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES), initial=datetime.datetime.now().month)
+    #ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO), initial=datetime.datetime.now().year)
 
 class FormScheduleManagement(forms.ModelForm):
     def __init__(self, *args, **kwargs):
