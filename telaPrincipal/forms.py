@@ -63,10 +63,10 @@ class FormEstrutura(forms.ModelForm):
         }
 
 LOCAISLIST = []
-b = 'SELECT * from telaPrincipal_Locais;'
-busca = Estrutura.objects.raw(b)
-for b in busca:
-    LOCAISLIST.append([b.id, b.nome])
+#b = 'SELECT * from telaPrincipal_Locais;'
+#busca = Estrutura.objects.raw(b)
+#for b in busca:
+#    LOCAISLIST.append([b.id, b.nome])
 
 MES = [
     ('1', 'Janeiro'),
