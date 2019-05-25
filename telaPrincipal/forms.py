@@ -94,9 +94,9 @@ class FormHourlySchedManag1(forms.Form):
 
         self.fields['id_local'].queryset = Estruturas.objects.none()
 
-    id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAISLIST))
-    mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES), initial=datetime.datetime.now().month)
-    ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO), initial=datetime.datetime.now().year)
+        id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAISLIST))
+        mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES), initial=datetime.datetime.now().month)
+        ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO), initial=datetime.datetime.now().year)
 
 class FormScheduleManagement(forms.ModelForm):
     def __init__(self, *args, **kwargs):
