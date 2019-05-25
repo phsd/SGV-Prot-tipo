@@ -63,7 +63,7 @@ class FormEstrutura(forms.ModelForm):
         }
 
 LOCAISLIST = []
-b = 'SELECT * from telaPrincipal_Locais;'
+b = 'SELECT * from telaPrincipal_locais;'
 busca = Estrutura.objects.raw(b)
 for b in busca:
     LOCAISLIST.append([b.id, b.nome])
