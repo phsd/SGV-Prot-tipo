@@ -5,8 +5,8 @@ import calendar
 from . import models
 import pytz
 from .forms import FormMaquina
-from .forms import FormEstrutura, FormScheduleManagement, FormScheduleManagementAdd, FormHourlySchedManag1, HourlyScheduleManagementEmProcesso, HourlyScheduleManagementRealizado
-from .models import Estruturas, Maquina, Locais
+from .forms import FormEstrutura, FormScheduleManagement, FormScheduleManagementAdd, FormHourlySchedManag1
+from .models import Estruturas, Maquina, Locais, HourlyScheduleManagementEmProcesso, HourlyScheduleManagementRealizado
 import math
 from django.contrib import messages
 import calendar
