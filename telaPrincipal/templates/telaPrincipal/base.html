@@ -32,6 +32,7 @@
     <script src="{% static 'vendors/flot/jquery.flot.js' %}"></script>
     <script src="{% static 'vendors/flot/jquery.flot.axislabels.js' %}"></script>
     <script src="{% static 'vendors/flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'js/jquery.disableAutoFill.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pt-br.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
@@ -65,17 +66,23 @@
                         <a href="{% url 'telaPrincipal:index' %}"> <i class="menu-icon fa fa-dashboard"></i>Quadro</a>
                     </li>
                     <li>
-                        <a href="{% url 'telaPrincipal:urlFormEstrutura' %}"> <i class="menu-icon fa fa-tasks"></i>Adicionar Cartão</a>
+                        <a href="{% url 'telaPrincipal:urlFormEstrutura' %}"> <i class="menu-icon fa fa-plus-square-o"></i>Adicionar Cartão</a>
                     </li>
                     <li>
-                        <a href="{% url 'telaPrincipal:urlFormMaquina' %}"> <i class="menu-icon fa fa-table"></i>Adicionar Máquina/Pacote</a>
+                        <a href="{% url 'telaPrincipal:urlFormMaquina' %}"> <i class="menu-icon fa fa-plus-square-o"></i>Adicionar Máquina/Pacote</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'telaPrincipal:urlBaixarCartao' %}"> <i class="menu-icon fa fa-plus-square-o"></i>Registrar Baixa Cartão</a>
                     </li>
                     <h3 class="menu-title">Hourly Sched. Manag.</span></h3><!-- /.menu-title -->
                     <li>
-                        <a href="{% url 'telaPrincipal:urlHourlySchedManag1' %}"> <i class="menu-icon fa fa-tasks"></i>Quadro/Gráfico</a>
+                        <a href="{% url 'telaPrincipal:urlHourlySchedManag1' %}"> <i class="menu-icon fa fa-bar-chart-o"></i>Quadro/Gráfico</a>
                     </li>
                     <li>
-                        <a href="{% url 'telaPrincipal:urlFormHourlySchedManag' %}"> <i class="menu-icon fa fa-table"></i>Adicionar Programação</a>
+                        <a href="{% url 'telaPrincipal:urlFormHourlySchedManag' %}"> <i class="menu-icon fa fa-plus-square-o"></i>Adicionar Programação</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'telaPrincipal:urlFormHourlySchedManagAdd' %}"> <i class="menu-icon fa fa-table"></i>Registrar Horário</a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -97,19 +104,12 @@
                     <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
                     <div class="header-left">
                       <button class="search-trigger"><i class="fa fa-bookmark"></i></button>
-                        <div class="form-inline">
-                            <form class="search-form">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
-                                <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
-                            </form>
-                        </div>
                         <div class="dropdown for-notification">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-bell"></i>
                                 <span class="count bg-danger">5</span>
                             </button>
                         </div>
-
                         <div class="dropdown for-message">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
                                 id="message"

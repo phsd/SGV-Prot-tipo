@@ -105,3 +105,9 @@ class HourlyScheduleManagementRealizado (models.Model):
     id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
     diaeHoraSaida = models.DateTimeField(null=True, blank=True)
+
+class HourlyScheduleManagementEmProcesso (models.Model):
+    id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
+    id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
+    diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
+    diaeHoraSaida = models.DateTimeField(null=True, blank=True)

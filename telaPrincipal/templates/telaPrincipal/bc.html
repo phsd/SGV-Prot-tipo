@@ -1,0 +1,213 @@
+{% extends 'telaPrincipal/base.html' %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Baixar Cartão{% endblock %}
+{% block h1Pagina %}Baixar Cartão{% endblock %}
+
+{% block breadcrumTextRight %}
+  <ol class="breadcrumb text-right">
+    <li style="text-transform:none;"><a href="{% url 'telaPrincipal:index' %}">Gestão a Vista</a></li>
+    <li class="active" style="text-transform:none;">Adicionar Máquina/Pacote</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  <style>
+    .box-content {
+      display: inline-block;
+      border-bottom: 1px solid grey;
+      width: 100%;
+      padding: 10px;
+    }
+  </style>
+  <div class="content mt-3">
+    {% if mensagem %}
+        <div class="alert alert-success" role="alert">{{ mensagem }}</div>
+    {% endif %}
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Corte
+            </button>
+          </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            <div class="box-content col-sm-4" style="border-top: 1px solid grey; font-weight: bold;">
+              Estrutura
+            </div>
+            <div class="box-content col-sm-3" style="border-top: 1px solid grey; font-weight: bold;">
+              Máq/Pacote
+            </div>
+            <div class="box-content col-sm-1" style="border-top: 1px solid grey; font-weight: bold;">
+              Serial
+            </div>
+            <div class="box-content col-sm-2 text-center" style="border-top: 1px solid grey; font-weight: bold;">
+              MO
+            </div>
+            <div class="box-content col-sm-2 text-right" style="border-top: 1px solid grey; font-weight: bold;">
+              &nbsp;
+            </div>
+            {% for cartao in cartoesCorte %}
+              <div class="box-content col-sm-4">
+                {{ cartao.id_estruturas.nome }}
+              </div>
+              <div class="box-content col-sm-3">
+                {{ cartao.nome }}
+              </div>
+              <div class="box-content col-sm-1">
+                SN:{{ cartao.id_maquina.serial }}
+              </div>
+              <div class="box-content col-sm-2 text-center">
+                MO:{{ cartao.ordemproducao }}
+              </div>
+              <div class="box-content col-sm-2 text-right">
+                <a href="{% url 'telaPrincipal:urlBaixarCartaoSalvar' 1 cartao.id %}" >Baixar</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Calderaria/Solda
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <div class="box-content col-sm-4" style="border-top: 1px solid grey; font-weight: bold;">
+              Estrutura
+            </div>
+            <div class="box-content col-sm-3" style="border-top: 1px solid grey; font-weight: bold;">
+              Máq/Pacote
+            </div>
+            <div class="box-content col-sm-1" style="border-top: 1px solid grey; font-weight: bold;">
+              Serial
+            </div>
+            <div class="box-content col-sm-2 text-center" style="border-top: 1px solid grey; font-weight: bold;">
+              MO
+            </div>
+            <div class="box-content col-sm-2 text-right" style="border-top: 1px solid grey; font-weight: bold;">
+              &nbsp;
+            </div>
+            {% for cartao in cartoesCaldSolda %}
+              <div class="box-content col-sm-4">
+                {{ cartao.id_estruturas.nome }}
+              </div>
+              <div class="box-content col-sm-3">
+                {{ cartao.nome }}
+              </div>
+              <div class="box-content col-sm-1">
+                SN:{{ cartao.id_maquina.serial }}
+              </div>
+              <div class="box-content col-sm-2 text-center">
+                MO:{{ cartao.ordemproducao }}
+              </div>
+              <div class="box-content col-sm-2 text-right">
+                <a href="{% url 'telaPrincipal:urlBaixarCartaoSalvar' 2 cartao.id %}" >Baixar</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingThree">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Usinagem
+            </button>
+          </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+          <div class="card-body">
+            <div class="box-content col-sm-4" style="border-top: 1px solid grey; font-weight: bold;">
+              Estrutura
+            </div>
+            <div class="box-content col-sm-3" style="border-top: 1px solid grey; font-weight: bold;">
+              Máq/Pacote
+            </div>
+            <div class="box-content col-sm-1" style="border-top: 1px solid grey; font-weight: bold;">
+              Serial
+            </div>
+            <div class="box-content col-sm-2 text-center" style="border-top: 1px solid grey; font-weight: bold;">
+              MO
+            </div>
+            <div class="box-content col-sm-2 text-right" style="border-top: 1px solid grey; font-weight: bold;">
+              &nbsp;
+            </div>
+            {% for cartao in cartoesUsinagem %}
+              <div class="box-content col-sm-4">
+                {{ cartao.id_estruturas.nome }}
+              </div>
+              <div class="box-content col-sm-3">
+                {{ cartao.nome }}
+              </div>
+              <div class="box-content col-sm-1">
+                SN:{{ cartao.id_maquina.serial }}
+              </div>
+              <div class="box-content col-sm-2 text-center">
+                MO:{{ cartao.ordemproducao }}
+              </div>
+              <div class="box-content col-sm-2 text-right">
+                <a href="{% url 'telaPrincipal:urlBaixarCartaoSalvar' 3 cartao.id %}" >Baixar</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingFour">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              Pintura
+            </button>
+          </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+          <div class="card-body">
+            <div class="box-content col-sm-4" style="border-top: 1px solid grey; font-weight: bold;">
+              Estrutura
+            </div>
+            <div class="box-content col-sm-3" style="border-top: 1px solid grey; font-weight: bold;">
+              Máq/Pacote
+            </div>
+            <div class="box-content col-sm-1" style="border-top: 1px solid grey; font-weight: bold;">
+              Serial
+            </div>
+            <div class="box-content col-sm-2 text-center" style="border-top: 1px solid grey; font-weight: bold;">
+              MO
+            </div>
+            <div class="box-content col-sm-2 text-right" style="border-top: 1px solid grey; font-weight: bold;">
+              &nbsp;
+            </div>
+            {% for cartao in cartoesPintura %}
+              <div class="box-content col-sm-4">
+                {{ cartao.id_estruturas.nome }}
+              </div>
+              <div class="box-content col-sm-3">
+                {{ cartao.nome }}
+              </div>
+              <div class="box-content col-sm-1">
+                SN:{{ cartao.id_maquina.serial }}
+              </div>
+              <div class="box-content col-sm-2 text-center">
+                MO:{{ cartao.ordemproducao }}
+              </div>
+              <div class="box-content col-sm-2 text-right">
+                <a href="{% url 'telaPrincipal:urlBaixarCartaoSalvar' 4 cartao.id %}" >Baixar</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

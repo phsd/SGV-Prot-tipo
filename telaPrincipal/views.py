@@ -5,7 +5,7 @@ import calendar
 from . import models
 import pytz
 from .forms import FormMaquina
-from .forms import FormEstrutura, FormScheduleManagement, FormHourlySchedManag1
+from .forms import FormEstrutura, FormScheduleManagement, FormScheduleManagementAdd, FormHourlySchedManag1, HourlyScheduleManagementEmProcesso, HourlyScheduleManagementRealizado
 from .models import Estruturas, Maquina, Locais
 import math
 from django.contrib import messages
@@ -541,7 +541,8 @@ def formularioMaquina(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-        form = FormMaquina()
+            messages.success(request, 'Máquina/Pacote adicionado com sucesso!')
+            form = FormMaquina()
         return render(request, 'telaPrincipal/formMaquina.html', {'form': form})
     else:
         form = FormMaquina()
@@ -647,9 +648,16 @@ def hourlySchedManag2(request, local, mes, ano):
 			telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + '''\'
         AND
             telaPrincipal_hourlyschedulemanagement.id_local_id =''' + local + '''
+        AND telaPrincipal_hourlyschedulemanagement.diaeHoraSaida > \'''' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + '''\'
 		ORDER BY telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada;'''
     busca = models.Estrutura.objects.raw(b)
+    minHoraProgHoje = datetime.datetime.now()
     for b in busca:
+        if (b.diaeHoraEntrada.day == datetime.datetime.now().day):
+            if (b.diaeHoraEntrada < minHoraProgHoje):
+                minHoraProgHoje = b.diaeHoraEntrada
+        print("aaaaaaaaaa")
+        print(b.diaeHoraEntrada.day)
         if (b.diaeHoraEntrada.day == b.diaeHoraSaida.day):
             posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
             if (b.diaeHoraEntrada.minute > 15):
@@ -741,6 +749,8 @@ def hourlySchedManag2(request, local, mes, ano):
             graficoHorasMes.insert(b.diaeHoraEntrada.month-1, hora2 + diferenca.total_seconds() * 1000)
 
 
+            if (b.diaeHoraSaida > minHoraProgHoje):
+                b.diaeHoraSaida = minHoraProgHoje
             posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
             if (b.diaeHoraEntrada.minute > 15):
                 posicaoInicial = posicaoInicial + 1
@@ -763,6 +773,9 @@ def hourlySchedManag2(request, local, mes, ano):
             hora2 = graficoHorasMes.pop(b.diaeHoraEntrada.month-1)
             graficoHorasMes.insert(b.diaeHoraEntrada.month-1, hora2 + diferenca.total_seconds() * 1000)
 
+
+            if (b.diaeHoraSaida > minHoraProgHoje):
+                b.diaeHoraSaida = minHoraProgHoje
             posicaoInicial = (b.diaeHoraEntrada.hour * 2) + 2
             if (b.diaeHoraEntrada.minute > 15):
                 posicaoInicial = posicaoInicial + 1
@@ -817,3 +830,200 @@ def formularioHourlySchedManag(request):
     else:
         form = FormScheduleManagement()
         return render(request, 'telaPrincipal/formHourlySchedManag.html', {'form': form})
+
+def formularioHourlySchedManagAdd(request):
+    if request.method == "POST" and "registrarInicio" in request.POST:
+        form = FormScheduleManagementAdd(request.POST)
+        if form.is_valid():
+            inserir = HourlyScheduleManagementEmProcesso(diaeHoraEntrada=datetime.datetime.now(), id_estrutura_id = request.POST['id_estrutura'], id_local_id = request.POST['id_local'])
+            inserir.save()
+            messages.success(request, 'Registrado com sucesso!')
+            form = FormScheduleManagementAdd()
+        return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
+    elif request.method == "POST" and "registrarFim" in request.POST:
+        form = FormScheduleManagementAdd(request.POST)
+        if form.is_valid():
+            realizado = HourlyScheduleManagementEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura'])
+            for ins in realizado:
+                print("dadas")
+                print(ins)
+                inserir = HourlyScheduleManagementRealizado(diaeHoraEntrada=ins.diaeHoraEntrada, diaeHoraSaida=datetime.datetime.now(), id_estrutura_id = ins.id_estrutura_id, id_local_id = ins.id_local_id)
+                inserir.save()
+            deletar = deletar = HourlyScheduleManagementEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura']).delete()
+            messages.success(request, 'Registrado com sucesso!')
+            form = FormScheduleManagementAdd()
+        return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
+    else:
+        form = FormScheduleManagementAdd()
+        return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
+
+def carregarEstrProcHSM(request):
+    idBusca = request.GET.get('id_local')
+    exibirPrimeiroItem = True
+    dataHoraInicio = ""
+    b = '''SELECT
+            telaPrincipal_estrutura.id, telaPrincipal_estrutura.ordemproducao,
+            telaPrincipal_estruturas.nome As nomeEstrutura, telaPrincipal_maquinas.nome As nomeMaquina,
+            telaPrincipal_hourlyschedulemanagementemprocesso.diaeHoraEntrada
+        FROM
+            telaPrincipal_hourlyschedulemanagementemprocesso
+        INNER JOIN
+            telaPrincipal_estrutura ON telaPrincipal_estrutura.id = telaPrincipal_hourlyschedulemanagementemprocesso.id_estrutura_id
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        INNER JOIN
+            telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+        INNER JOIN
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+        WHERE
+            telaPrincipal_hourlyschedulemanagementemprocesso.id_local_id = ''' + idBusca + ''';'''
+    busca = models.Estrutura.objects.raw(b)
+    if (len(list(busca)) > 0):
+        for b in busca:
+            dataHoraInicio = b.diaeHoraEntrada.strftime('%d/%m/%Y %H:%M')
+        exibirPrimeiroItem = False
+    else:
+        b = '''SELECT
+                telaPrincipal_estrutura.dataBaixaCaldSolda As dataInicioProcesso,
+                telaPrincipal_estruturas.prazopadraocorte, telaPrincipal_estrutura.prazocorte,
+                telaPrincipal_estruturas.prazopadraocaldsolda, telaPrincipal_estrutura.prazocaldsolda,
+                telaPrincipal_estruturas.prazopadraousinagem As prazoPadraoProcesso, telaPrincipal_estrutura.prazousinagem As prazoProcesso,
+                telaPrincipal_estruturas.prazopadraopintura, telaPrincipal_estrutura.prazopintura,
+                telaPrincipal_estrutura.id, telaPrincipal_estruturas.nome As nomeEstrutura, telaPrincipal_maquina.serial, telaPrincipal_maquinas.nome As nomeMaquina,
+                telaPrincipal_estrutura.dataEntregaMax,
+                telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
+                telaPrincipal_maquina.id As idMaquina
+            FROM
+                telaPrincipal_estrutura
+            INNER JOIN
+                telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+            INNER JOIN
+                telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+            INNER JOIN
+                telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+            WHERE
+                telaPrincipal_estrutura.dataBaixaCaldSolda is not null
+            AND
+                telaPrincipal_estrutura.dataBaixaUsinagem is null;'''
+        busca = models.Estrutura.objects.raw(b)
+    return render(request, 'telaPrincipal/estruturas_dropdown_list_optionsHSM.json', {'estruturas': busca, 'exibirPrimeiroItem': exibirPrimeiroItem, "dataHoraInicio": dataHoraInicio})
+
+def selecionarCartoesBaixar():
+    b = '''SELECT
+            telaPrincipal_estrutura.dataInicioManufatura AS dataInicioProcesso,
+            telaPrincipal_estruturas.prazopadraocorte As prazoPadraoProcesso, telaPrincipal_estrutura.prazocorte As prazoProcesso,
+            telaPrincipal_estruturas.prazopadraocaldsolda, telaPrincipal_estrutura.prazocaldsolda,
+            telaPrincipal_estruturas.prazopadraousinagem, telaPrincipal_estrutura.prazousinagem,
+            telaPrincipal_estruturas.prazopadraopintura, telaPrincipal_estrutura.prazopintura,
+            telaPrincipal_estrutura.id, telaPrincipal_estruturas.nome, telaPrincipal_maquina.serial, telaPrincipal_maquinas.nome,
+            telaPrincipal_estrutura.dataEntregaMax, telaPrincipal_estrutura.ordemproducao,
+            telaPrincipal_maquina.id As idMaquina
+        FROM
+            telaPrincipal_estrutura
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        INNER JOIN
+            telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+        INNER JOIN
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+        WHERE
+            telaPrincipal_estrutura.dataBaixaCorte is null;'''
+    cartoesCorte = models.Estrutura.objects.raw(b)
+
+    b = '''SELECT
+            telaPrincipal_estrutura.dataBaixaCorte As dataInicioProcesso,
+            telaPrincipal_estruturas.prazopadraocorte, telaPrincipal_estrutura.prazocorte,
+            telaPrincipal_estruturas.prazopadraocaldsolda As prazoPadraoProcesso, telaPrincipal_estrutura.prazocaldsolda As prazoProcesso,
+            telaPrincipal_estruturas.prazopadraousinagem, telaPrincipal_estrutura.prazousinagem,
+            telaPrincipal_estruturas.prazopadraopintura, telaPrincipal_estrutura.prazopintura,
+            telaPrincipal_estrutura.id, telaPrincipal_estruturas.nome, telaPrincipal_maquina.serial, telaPrincipal_maquinas.nome,
+            telaPrincipal_estrutura.dataEntregaMax,
+            telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
+            telaPrincipal_maquina.id As idMaquina
+        FROM
+            telaPrincipal_estrutura
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        INNER JOIN
+            telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+        INNER JOIN
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+        WHERE
+            telaPrincipal_estrutura.dataBaixaCorte is not null
+        AND
+            telaPrincipal_estrutura.dataBaixaCaldSolda is null;'''
+    cartoesCaldSolda = models.Estrutura.objects.raw(b)
+
+    b = '''SELECT
+            telaPrincipal_estrutura.dataBaixaCaldSolda As dataInicioProcesso,
+            telaPrincipal_estruturas.prazopadraocorte, telaPrincipal_estrutura.prazocorte,
+            telaPrincipal_estruturas.prazopadraocaldsolda, telaPrincipal_estrutura.prazocaldsolda,
+            telaPrincipal_estruturas.prazopadraousinagem As prazoPadraoProcesso, telaPrincipal_estrutura.prazousinagem As prazoProcesso,
+            telaPrincipal_estruturas.prazopadraopintura, telaPrincipal_estrutura.prazopintura,
+            telaPrincipal_estrutura.id, telaPrincipal_estruturas.nome, telaPrincipal_maquina.serial, telaPrincipal_maquinas.nome,
+            telaPrincipal_estrutura.dataEntregaMax,
+            telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
+            telaPrincipal_maquina.id As idMaquina
+        FROM
+            telaPrincipal_estrutura
+        INNER JOIN
+            telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        INNER JOIN
+            telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+        INNER JOIN
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+        WHERE
+            telaPrincipal_estrutura.dataBaixaCaldSolda is not null
+        AND
+            telaPrincipal_estrutura.dataBaixaUsinagem is null;'''
+    cartoesUsinagem = models.Estrutura.objects.raw(b)
+
+    b = '''SELECT
+            telaPrincipal_estrutura.dataBaixaUsinagem As dataInicioProcesso,
+            telaPrincipal_estruturas.prazopadraocorte, telaPrincipal_estrutura.prazocorte,
+            telaPrincipal_estruturas.prazopadraocaldsolda, telaPrincipal_estrutura.prazocaldsolda,
+            telaPrincipal_estruturas.prazopadraousinagem, telaPrincipal_estrutura.prazousinagem,
+            telaPrincipal_estruturas.prazopadraopintura As prazoPadraoProcesso, telaPrincipal_estrutura.prazopintura As prazoProcesso,
+            telaPrincipal_estrutura.id, telaPrincipal_estruturas.nome, telaPrincipal_maquina.serial, telaPrincipal_maquinas.nome,
+            telaPrincipal_estrutura.dataEntregaMax,
+            telaPrincipal_estrutura.dataInicioManufatura, telaPrincipal_estrutura.ordemproducao,
+            telaPrincipal_maquina.id As idMaquina
+        FROM
+            telaPrincipal_estrutura
+        INNER JOIN
+        telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+        INNER JOIN
+            telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+        INNER JOIN
+            telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+        WHERE
+            telaPrincipal_estrutura.dataBaixaUsinagem is not null
+        AND
+            telaPrincipal_estrutura.dataBaixaPintura is null;'''
+    cartoesPintura = models.Estrutura.objects.raw(b)
+    contexto = {
+        'cartoesCorte': cartoesCorte,
+        'cartoesCaldSolda': cartoesCaldSolda,
+        'cartoesUsinagem': cartoesUsinagem,
+        'cartoesPintura': cartoesPintura,
+    }
+    return (contexto)
+
+def baixarCartao(request):
+    return render(request, 'telaPrincipal/bc.html', selecionarCartoesBaixar())
+
+def baixarCartaoSalvar(request, processo, idestrutura):
+    contexto = selecionarCartoesBaixar()
+    if (processo == "1"):
+        atualizar = models.Estrutura.objects.filter(id=idestrutura).update(dataBaixaCorte=datetime.datetime.now())
+        contexto["mensagem"] = "Baixa registrada"
+    elif (processo == "2"):
+        atualizar = models.Estrutura.objects.filter(id=idestrutura).update(dataBaixaCaldSolda=datetime.datetime.now())
+        contexto["mensagem"] = "Baixa registrada"
+    elif (processo == "3"):
+        atualizar = models.Estrutura.objects.filter(id=idestrutura).update(dataBaixaUsinagem=datetime.datetime.now())
+        contexto["mensagem"] = "Baixa registrada"
+    elif (processo == "4"):
+        atualizar = models.Estrutura.objects.filter(id=idestrutura).update(dataBaixaPintura=datetime.datetime.now())
+        contexto["mensagem"] = "Baixa registrada"
+    return render(request, 'telaPrincipal/bc.html', contexto)

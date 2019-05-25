@@ -20,6 +20,11 @@
           <strong>Inserir Número de série de Máquina/Pacote</strong> <small> (Novo Conjunto de Cartões no Quadro de Gestão a Vista)</small>
       </div>
       <div class="card-body card-block">
+        {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         <form method="POST" class="form-row">
           {% csrf_token %}
           <div class="form-group col-md-6">

@@ -46,8 +46,9 @@
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     jQuery.datetimepicker.setLocale('pt-BR');
+    $('#id_diaeHoraEntrada').disableAutoFill();
     $("#id_diaeHoraEntrada").datetimepicker({
-      format:'Y-m-d H:i',
+      format:'d/m/Y H:i',
       allowTimes:[
         '00:00', '00:30',
         '01:00', '01:30',
@@ -75,8 +76,9 @@
         '23:00', '23:30'
        ]
     });
+    $('#id_diaeHoraSaida').disableAutoFill();
     $("#id_diaeHoraSaida").datetimepicker({
-      format:'Y-m-d H:i',
+      format:'d/m/Y H:i',
       allowTimes:[
         '00:00', '00:30',
         '01:00', '01:30',

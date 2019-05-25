@@ -1,9 +1,12 @@
 from django import forms
+import datetime
 from .models import Maquina, Maquinas
 from .models import Estrutura
 from .models import Estruturas
 from .models import HourlyScheduleManagement
 from .models import Locais
+from .models import HourlyScheduleManagementRealizado
+from .models import HourlyScheduleManagementEmProcesso
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
@@ -40,14 +43,12 @@ class FormEstrutura(forms.ModelForm):
                 idBusca = int(self.data.get('id_maquina'))
                 idMaquina = Maquina.objects.filter(id=idBusca)
                 for idm in idMaquina:
-                    print (idm.id_maquinas.id)
                     self.fields['id_estruturas'].queryset = Estruturas.objects.filter(id_maquinas=idm.id_maquinas.id)
                     break;
             except (ValueError, TypeError):
-                print ("aqui4")
+                print ("Erro!")
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance.pk:
-            print ("aqui5")
             self.fields['id_estruturas'].queryset = self.instance.id_maquina.id_estruturas_set
 
     class Meta:
@@ -94,8 +95,8 @@ class FormHourlySchedManag1(forms.Form):
         self.fields['id_local'].queryset = Estruturas.objects.none()
 
     id_local= forms.CharField(label='Local:', widget=forms.Select(choices=LOCAISLIST))
-    mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES))
-    ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO))
+    mes= forms.CharField(label='Mês:', widget=forms.Select(choices=MES), initial=datetime.datetime.now().month)
+    ano= forms.CharField(label='Ano:', widget=forms.Select(choices=ANO), initial=datetime.datetime.now().year)
 
 class FormScheduleManagement(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -135,17 +136,47 @@ class FormScheduleManagement(forms.ModelForm):
         if 'id_estrutura' in self.data:
             try:
                 idBusca = int(self.data.get('id_estrutura'))
-                print(idBusca)
                 self.fields['id_estrutura'].queryset = Estrutura.objects.filter(id=idBusca)
             except (ValueError, TypeError):
-                print ("aqui4")
+                print ("Erro!")
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
-
-
-
 
     class Meta:
         model = HourlyScheduleManagement
+        fields = ('id_local', 'id_estrutura', 'diaeHoraEntrada', 'diaeHoraSaida')
+        labels = {
+            'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:',
+        }
+
+class FormScheduleManagementAdd(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FormScheduleManagementAdd, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_class = 'form-group'
+
+        self.fields['id_estrutura'].queryset = Estruturas.objects.none()
+        self.fields['id_estrutura'].required = False
+        self.fields['diaeHoraEntrada'] = forms.DateTimeField(initial=datetime.datetime.today)
+        self.fields['diaeHoraEntrada'].label = "Início:"
+        self.fields['diaeHoraEntrada'].widget.attrs.update({'class' : 'itemFormOculto'})
+        self.fields['diaeHoraEntrada'].widget.attrs.update({'disabled' : 'disabled'})
+        self.fields['diaeHoraEntrada'].required = False
+        self.fields['diaeHoraSaida'] = forms.DateTimeField(initial=datetime.datetime.today)
+        self.fields['diaeHoraSaida'].label = "Fim:"
+        self.fields['diaeHoraSaida'].widget.attrs.update({'class' : 'itemFormOculto'})
+        self.fields['diaeHoraSaida'].widget.attrs.update({'disabled' : 'disabled'})
+        self.fields['diaeHoraSaida'].required = False
+
+        if 'id_estrutura' in self.data:
+            try:
+                idBusca = int(self.data.get('id_estrutura'))
+                self.fields['id_estrutura'].queryset = Estrutura.objects.filter(id=idBusca)
+            except (ValueError, TypeError):
+                print ("Erro!")
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+
+    class Meta:
+        model = HourlyScheduleManagementEmProcesso
         fields = ('id_local', 'id_estrutura', 'diaeHoraEntrada', 'diaeHoraSaida')
         labels = {
             'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:',

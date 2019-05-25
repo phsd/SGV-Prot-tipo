@@ -1,0 +1,21 @@
+[{
+  "nome": "teste",
+  "exibirPrimeiroItem": "{{ exibirPrimeiroItem }}",
+  "dataHoraInicio": "{{ dataHoraInicio }}",
+  "opcoes":
+      [
+        {
+          "id": "",
+          "rotulo": "---------"
+        },
+        {% for e in estruturas %}
+          {
+            "id": "{{e.id}}",
+            "rotulo": "MO: {{ e.ordemproducao }} - {{ e.nomeEstrutura }} {{ e.nomeMaquina }}"
+          }
+          {% if forloop.revcounter != 1 %}
+            ,
+          {% endif %}
+        {% endfor %}
+      ]
+}]
