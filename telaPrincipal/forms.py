@@ -6,7 +6,7 @@ from .models import Estruturas
 from .models import HourlyScheduleManagement
 from .models import Locais
 from .models import HourlyScheduleManagementRealizado
-from .models import HourlyScheduleManagementEmProcesso
+from .models import HSMEmProcesso
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
@@ -176,7 +176,7 @@ class FormScheduleManagementAdd(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
 
     class Meta:
-        model = HourlyScheduleManagementEmProcesso
+        model = HSMEmProcesso
         fields = ('id_local', 'id_estrutura', 'diaeHoraEntrada', 'diaeHoraSaida')
         labels = {
             'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:',

@@ -106,7 +106,7 @@ class HourlyScheduleManagementRealizado (models.Model):
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
     diaeHoraSaida = models.DateTimeField(null=True, blank=True)
 
-class HourlyScheduleManagementEmProcesso (models.Model):
+class HSMEmProcesso (models.Model):
     id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
     id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)

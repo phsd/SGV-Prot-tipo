@@ -6,7 +6,7 @@ from . import models
 import pytz
 from .forms import FormMaquina
 from .forms import FormEstrutura, FormScheduleManagement, FormScheduleManagementAdd, FormHourlySchedManag1
-from .models import Estruturas, Maquina, Locais, HourlyScheduleManagementEmProcesso, HourlyScheduleManagementRealizado
+from .models import Estruturas, Maquina, Locais, HSMEmProcesso, HourlyScheduleManagementRealizado
 import math
 from django.contrib import messages
 import calendar
@@ -835,7 +835,7 @@ def formularioHourlySchedManagAdd(request):
     if request.method == "POST" and "registrarInicio" in request.POST:
         form = FormScheduleManagementAdd(request.POST)
         if form.is_valid():
-            inserir = HourlyScheduleManagementEmProcesso(diaeHoraEntrada=datetime.datetime.now(), id_estrutura_id = request.POST['id_estrutura'], id_local_id = request.POST['id_local'])
+            inserir = HSMEmProcesso(diaeHoraEntrada=datetime.datetime.now(), id_estrutura_id = request.POST['id_estrutura'], id_local_id = request.POST['id_local'])
             inserir.save()
             messages.success(request, 'Registrado com sucesso!')
             form = FormScheduleManagementAdd()
@@ -843,13 +843,13 @@ def formularioHourlySchedManagAdd(request):
     elif request.method == "POST" and "registrarFim" in request.POST:
         form = FormScheduleManagementAdd(request.POST)
         if form.is_valid():
-            realizado = HourlyScheduleManagementEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura'])
+            realizado = HSMEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura'])
             for ins in realizado:
                 print("dadas")
                 print(ins)
                 inserir = HourlyScheduleManagementRealizado(diaeHoraEntrada=ins.diaeHoraEntrada, diaeHoraSaida=datetime.datetime.now(), id_estrutura_id = ins.id_estrutura_id, id_local_id = ins.id_local_id)
                 inserir.save()
-            deletar = deletar = HourlyScheduleManagementEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura']).delete()
+            deletar = deletar = HSMEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura']).delete()
             messages.success(request, 'Registrado com sucesso!')
             form = FormScheduleManagementAdd()
         return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
@@ -864,11 +864,11 @@ def carregarEstrProcHSM(request):
     b = '''SELECT
             telaPrincipal_estrutura.id, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_estruturas.nome As nomeEstrutura, telaPrincipal_maquinas.nome As nomeMaquina,
-            telaPrincipal_hourlyschedulemanagementemprocesso.diaeHoraEntrada
+            telaPrincipal_hsmemprocesso.diaeHoraEntrada
         FROM
-            telaPrincipal_hourlyschedulemanagementemprocesso
+            telaPrincipal_hsmemprocesso
         INNER JOIN
-            telaPrincipal_estrutura ON telaPrincipal_estrutura.id = telaPrincipal_hourlyschedulemanagementemprocesso.id_estrutura_id
+            telaPrincipal_estrutura ON telaPrincipal_estrutura.id = telaPrincipal_hsmemprocesso.id_estrutura_id
         INNER JOIN
             telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         INNER JOIN
@@ -876,8 +876,8 @@ def carregarEstrProcHSM(request):
         INNER JOIN
             telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
-            telaPrincipal_hourlyschedulemanagementemprocesso.id_local_id = ''' + idBusca + ''';'''
-    busca = models.HourlyScheduleManagementEmProcesso.objects.raw(b)
+            telaPrincipal_hsmemprocesso.id_local_id = ''' + idBusca + ''';'''
+    busca = models.HSMEmProcesso.objects.raw(b)
     if (len(list(busca)) > 0):
         for b in busca:
             dataHoraInicio = b.diaeHoraEntrada.strftime('%d/%m/%Y %H:%M')
