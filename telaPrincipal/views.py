@@ -877,7 +877,7 @@ def carregarEstrProcHSM(request):
             telaPrincipal_maquinas ON telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
         WHERE
             telaPrincipal_hourlyschedulemanagementemprocesso.id_local_id = ''' + idBusca + ''';'''
-    busca = models.Estrutura.objects.raw(b)
+    busca = models.HourlyScheduleManagementEmProcesso.objects.raw(b)
     if (len(list(busca)) > 0):
         for b in busca:
             dataHoraInicio = b.diaeHoraEntrada.strftime('%d/%m/%Y %H:%M')
