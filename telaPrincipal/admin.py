@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Maquinas, Maquina, Estruturas, Estrutura, Setores, Locais, HourlyScheduleManagement, HourlyScheduleManagementRealizado
+from .models import Maquinas, Maquina, Estruturas, Estrutura, Setores, Locais, HourlyScheduleManagement, HourlyScheduleManagementRealizado, HSMEmProcesso
 
 admin.site.register(Maquinas)
 admin.site.register(Maquina)
