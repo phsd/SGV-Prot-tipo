@@ -12,7 +12,7 @@
     border-top: 1px solid Gainsboro;
     margin-left: 1vh;
     margin-right: 1vh;
-    margin-top: 0.8vh;
+    margin-top: 1.2vh;
     grid-template-rows: 8fr{% for j in diasdoMes %} 4fr{% endfor %};
     -ms-grid-rows: 8fr{% for j in diasdoMes %} 4fr{% endfor %};
     background-color: white;
@@ -28,9 +28,6 @@
     justify-content: center;
     align-items: center;
   }
-  .divHora2 {
-    border: 1px solid gray;
-  }
   .divHoraPrimMeiaHora {
     border-right: 0;
   }
@@ -42,7 +39,17 @@
     margin: 1vh;
   }
 </style>
+  {% if emprocesso.0 == "true" %}
+    <div style="margin-top: 1vh; margin-left: 1vh; margin-right: 1vh;">
+      <div class="card" style="margin:0 ;">
+        <div class="card-body bg-primary" style="color: white;">
+          <span style="font-weight: bold;">Em processo:</span> MO:{{emprocesso.1}} {{emprocesso.2}} - {{ emprocesso.3 }} SN:{{ emprocesso.4 }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
   <div class="wrapper">
+
     <div class="divHora" style="-ms-grid-row: 1; -ms-grid-column: 1">
         Hora →<br />
         Dia ↓

@@ -603,6 +603,30 @@ def hourlySchedManag1(request):
         return render(request, 'telaPrincipal/hourlySchedManag1.html', {'form': form})
 
 def hourlySchedManag2(request, local, mes, ano):
+    emprocesso = ['false']
+    if (datetime.datetime.today().month == int(mes) and datetime.datetime.today().year == int(ano)):
+        b = '''SELECT telaPrincipal_estrutura.ordemproducao, telaPrincipal_estruturas.nome AS nomeEstrutura,
+                telaPrincipal_maquina.serial, telaPrincipal_maquinas.nome AS nomeMaquina, telaPrincipal_hsmemprocesso.id
+            FROM
+                telaPrincipal_hsmemprocesso
+            INNER JOIN
+                telaPrincipal_estrutura ON telaPrincipal_hsmemprocesso.id_estrutura_id = telaPrincipal_estrutura.id
+            INNER JOIN
+                telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
+            INNER JOIN
+                telaPrincipal_maquina ON telaPrincipal_estrutura.id_maquina_id = telaPrincipal_maquina.id
+            INNER JOIN
+                telaPrincipal_maquinas on telaPrincipal_maquina.id_maquinas_id = telaPrincipal_maquinas.id
+            WHERE telaPrincipal_hsmemprocesso.id_local_id = ''' + local + ''';
+        '''
+        busca = HSMEmProcesso.objects.raw(b)
+        for b in busca:
+            emprocesso[0] = 'true'
+            emprocesso.append(b.ordemproducao)
+            emprocesso.append(b.nomeEstrutura)
+            emprocesso.append(b.nomeMaquina)
+            emprocesso.append(b.serial)
+
     nomeLocal = local
     nomesMes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
     anoExibicao = int(ano)
@@ -816,6 +840,7 @@ def hourlySchedManag2(request, local, mes, ano):
         'nomeLocal': nomeLocal,
         'mes': nomesMes[int(mes)-1],
         'ano': ano,
+        'emprocesso': emprocesso
     }
     return render (request, "telaPrincipal/hourlySchedManag2.html", contexto)
 
@@ -864,7 +889,7 @@ def carregarEstrProcHSM(request):
     b = '''SELECT
             telaPrincipal_estrutura.id, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_estruturas.nome As nomeEstrutura, telaPrincipal_maquinas.nome As nomeMaquina,
-            telaPrincipal_hsmemprocesso.diaeHoraEntrada
+            telaPrincipal_hsmemprocesso.diaeHoraEntrada, telaPrincipal_maquina.serial
         FROM
             telaPrincipal_hsmemprocesso
         INNER JOIN
