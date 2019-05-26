@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^HourlyScheduleManagement1', views.hourlySchedManag1, name='urlHourlySchedManag1'),
     url(r'^HourlyScheduleManagement2/(?P<local>[-\w]+)/(?P<mes>[-\w]+)/(?P<ano>[-\w]+)/$', views.hourlySchedManag2, name='urlHourlySchedManag2'),
     url(r'^formHourlyScheduleManagement', views.formularioHourlySchedManag, name='urlFormHourlySchedManag'),
-    url(r'^HourlyScheduleManagementForm', views.formularioHourlySchedManagAdd, name='urlFormHourlySchedManagAdd'),
+    url(r'^hsm', views.formularioHourlySchedManagAdd, name='urlFormHourlySchedManagAdd'),
 
     url(r'^ajax/carEstrProcHSM/', views.carregarEstrProcHSM, name='ajaxCarEstrProcHSM'),
 
