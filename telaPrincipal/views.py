@@ -116,7 +116,7 @@ def index(request):
                 print ("aqui2")
                 diasDisponiveis = subtrairdatas(dataEntregaEstimada, b.dataEntregaMax.replace(tzinfo=None)) - 1
             print (diasDisponiveis)
-            if diasDisponiveis > 0:
+            if diasDisponiveis >= 0:
                 estiloCSSCartaonoPrazodeEntrega = "cartaonoprazodeentrega"
             elif diasDisponiveis > -5:
                 estiloCSSCartaonoPrazodeEntrega = "cartaoforadoprazodeentrega1"
