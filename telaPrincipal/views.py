@@ -421,7 +421,7 @@ def maquina(request, id_maquina, id_estrutura):
                 else:
                     if n >= 0:
                         diasProcesso.append(["Dom", inicio + timedelta(n), "domingo", "", ""])
-            if fim.hour <= 12 and fim1 != "agora":
+            if fim.hour <= 12 and fim1 != "agora" and len(diasProcesso) > 1:
                 diasProcesso.pop()
                 diasProcesso[-1][3] = "2em1"
                 diasProcesso[-1][4] = fim
@@ -481,6 +481,8 @@ def maquina(request, id_maquina, id_estrutura):
             estrutura.append(len(diasProcesso)) #12 corte
             estrutura.append(diasProcesso) #13 corte
             if (b.dataBaixaCaldSolda is not None):
+                print("aqui")
+                print(b.dataBaixaCorte, b.dataBaixaCaldSolda, b.prazopadraocaldsolda + b.prazocaldsolda)
                 diasProcesso = calendProcesso2(b.dataBaixaCorte, b.dataBaixaCaldSolda, b.prazopadraocaldsolda + b.prazocaldsolda)
                 estrutura.append(len(diasProcesso)) #14 cald/solda
                 estrutura.append(diasProcesso) #15 cald/solda

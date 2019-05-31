@@ -177,6 +177,21 @@
       });
       $( "#id_prazocorte" ).addClass("form-control-sm");
 
+      $("#id_prazocaldsolda").change(function () {
+        $("#spanTotalCaldSolda").html(Number($("#spanPrazoPadraoCaldSolda").text()) + Number($(this).val()));
+      });
+      $( "#id_prazocaldsolda" ).addClass("form-control-sm");
+
+      $("#id_prazousinagem").change(function () {
+        $("#spanTotalUsinagem").html(Number($("#spanPrazoPadraoUsinagem").text()) + Number($(this).val()));
+      });
+      $( "#id_prazousinagem" ).addClass("form-control-sm");
+
+      $("#id_prazopintura").change(function () {
+        $("#spanTotalPintura").html(Number($("#spanPrazoPadraoPintura").text()) + Number($(this).val()));
+      });
+      $( "#id_prazopintura" ).addClass("form-control-sm");
+
       jQuery.datetimepicker.setLocale('pt-BR');
       $('#id_dataInicioManufatura').disableAutoFill();
       $("#id_dataInicioManufatura").datetimepicker({
