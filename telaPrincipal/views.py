@@ -669,9 +669,9 @@ def hourlySchedManag2(request, local, mes, ano):
         INNER JOIN
 			telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         WHERE
-            telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada >= \'''' + dataInicialMes.strftime("%Y-%m-%d") + '''\'
+            telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada >= \'''' + dataInicialMes.strftime("%Y-%m-%d") + ''' 00:00:00\'
 		AND
-			telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + '''\'
+			telaPrincipal_hourlyschedulemanagement.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + ''' 23:59:00\'
         AND
             telaPrincipal_hourlyschedulemanagement.id_local_id =''' + local + '''
         AND telaPrincipal_hourlyschedulemanagement.diaeHoraSaida > \'''' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + '''\'
@@ -754,12 +754,13 @@ def hourlySchedManag2(request, local, mes, ano):
         INNER JOIN
 			telaPrincipal_estruturas ON telaPrincipal_estrutura.id_estruturas_id = telaPrincipal_estruturas.id
         WHERE
-            telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada >= \'''' + dataInicialMes.strftime("%Y-%m-%d") + '''\'
+            telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada >= \'''' + dataInicialMes.strftime("%Y-%m-%d") + ''' 00:00:00\'
 		AND
-			telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + '''\'
+			telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada <= \'''' + dataFinalMes.strftime("%Y-%m-%d") + ''' 23:59:00\'
         AND
             telaPrincipal_hourlyschedulemanagementRealizado.id_local_id =''' + local + '''
 		ORDER BY telaPrincipal_hourlyschedulemanagementRealizado.diaeHoraEntrada;'''
+    print (b)
     busca = models.Estrutura.objects.raw(b)
     for b in busca:
         corCaneta = corCaneta + 1
