@@ -105,9 +105,31 @@ class HourlyScheduleManagementRealizado (models.Model):
     id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
     diaeHoraSaida = models.DateTimeField(null=True, blank=True)
+    id_usuario = models.IntegerField(null=True, blank=True)
 
 class HSMEmProcesso (models.Model):
     id_local = models.ForeignKey('Locais', on_delete=models.PROTECT)
     id_estrutura = models.ForeignKey('Estrutura', on_delete=models.PROTECT)
     diaeHoraEntrada = models.DateTimeField(null=True, blank=True)
     diaeHoraSaida = models.DateTimeField(null=True, blank=True)
+    id_usuario = models.IntegerField(null=False, blank=False)
+    id_tarefasgerais = models.ForeignKey('TarefasGerais', null=True, blank=True, on_delete=models.SET_NULL)
+
+class TarefasGerais (models.Model):
+    sigla = models.CharField(
+        max_length=10,
+        null=False,
+        blank=False
+    )
+    nome = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False
+    )
+    def __str__(self):
+        return  (str(self.sigla) + " - " + str(self.nome))
+
+class HSMTarefasGerais (models.Model):
+    id_tarefasgerais = models.ForeignKey('TarefasGerais', on_delete=models.PROTECT)
+    id_hsmemprocesso = models.ForeignKey('HSMEmProcesso', on_delete=models.PROTECT)
+    id_hsmrealizado = models.ForeignKey('HourlyScheduleManagementRealizado', on_delete=models.PROTECT)

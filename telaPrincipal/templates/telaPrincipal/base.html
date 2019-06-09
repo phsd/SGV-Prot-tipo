@@ -125,8 +125,7 @@
                     <div class="user-area dropdown float-right">
                       {% if user.is_authenticated %}
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="{% static 'images/admin.jpg' %}" alt="User Avatar">
-                        </a>
+                            <img class="user-avatar rounded-circle" src="{% with 'images/'|add:user.last_name|add:'.jpg' as foto_usuario %}{% static foto_usuario %}{% endwith %}" alt="User Avatar"></a>
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" href="#"><i class="fa fa-user"></i> Meu Perfil</a>
                             <a class="nav-link" href="{% url 'telaPrincipal:logout' %}"><i class="fa fa-power-off"></i> Logout</a>

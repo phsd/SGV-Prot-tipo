@@ -1,6 +1,8 @@
 [{
-  "nome": "teste",
-  "exibirPrimeiroItem": "{{ exibirPrimeiroItem }}",
+  "id_usuario": "{{ id_usuario }}",
+  "nome": "{{ nome }}",
+  "exibirTodasOpcoesEstr": "{{ exibirTodasOpcoesEstr }}",
+  "exibirTG": "{{exibirTG}}",
   "dataHoraInicio": "{{ dataHoraInicio }}",
   "opcoes":
       [

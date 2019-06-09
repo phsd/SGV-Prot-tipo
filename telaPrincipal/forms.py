@@ -164,6 +164,7 @@ class FormScheduleManagementAdd(forms.ModelForm):
         self.fields['diaeHoraSaida'].widget.attrs.update({'disabled' : 'disabled'})
         self.fields['diaeHoraSaida'].required = False
 
+
         if 'id_estrutura' in self.data:
             try:
                 idBusca = int(self.data.get('id_estrutura'))
@@ -174,7 +175,7 @@ class FormScheduleManagementAdd(forms.ModelForm):
 
     class Meta:
         model = HSMEmProcesso
-        fields = ('id_local', 'id_estrutura', 'diaeHoraEntrada', 'diaeHoraSaida')
+        fields = ('id_local', 'id_estrutura', 'diaeHoraEntrada', 'diaeHoraSaida', 'id_tarefasgerais')
         labels = {
-            'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:',
+            'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:', 'id_tarefasgerais': "Selecionar TG:",
         }
