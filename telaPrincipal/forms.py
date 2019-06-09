@@ -62,9 +62,9 @@ class FormEstrutura(forms.ModelForm):
             'prazopintura': 'Dias para Pintura:',
         }
 LOCAISLIST = []
-busca = Locais.objects.filter()
-for b in busca:
-    LOCAISLIST.append([b.id, b.nome])
+#busca = Locais.objects.filter()
+#for b in busca:
+#    LOCAISLIST.append([b.id, b.nome])
 
 MES = [
     ('1', 'Janeiro'),
