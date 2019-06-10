@@ -4,7 +4,6 @@
   "exibirTodasOpcoesEstr": "{{ exibirTodasOpcoesEstr }}",
   "exibirTG": "{{exibirTG}}",
   "dataHoraInicio": "{{ dataHoraInicio }}",
-  "idHsmemprocesso": "{{idHsmemprocesso}}",
   "opcoes":
       [
         {
@@ -15,20 +14,6 @@
           {
             "id": "{{e.id}}",
             "rotulo": "MO: {{ e.ordemproducao }} {{ e.nomeEstrutura }} - {{ e.nomeMaquina }} SN:{{ e.serial }}"
-          }
-          {% if forloop.revcounter != 1 %}
-            ,
-          {% endif %}
-        {% endfor %}
-      ],
-  "listTarefasGerais":
-      [
-        {% for tg in listTarefasGerais %}
-          {
-            "tgsiglaenome": "{{tg.0}}",
-            "diaeHoraInicio": "{{tg.1|date:'m/d/Y H:i'}}",
-            "diaeHoraFim": "{{tg.2|date:'m/d/Y H:i'}}",
-            "idTg": "{{tg.3}}"
           }
           {% if forloop.revcounter != 1 %}
             ,

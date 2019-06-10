@@ -6,7 +6,7 @@ from . import models
 import pytz
 from .forms import FormMaquina
 from .forms import FormEstrutura, FormScheduleManagement, FormScheduleManagementAdd, FormHourlySchedManag1
-from .models import Estruturas, Maquina, Locais, HSMEmProcesso, HourlyScheduleManagementRealizado, TarefasGerais, HSMTarefasGerais
+from .models import Estruturas, Maquina, Locais, HSMEmProcesso, HourlyScheduleManagementRealizado
 import math
 from django.contrib import messages
 import calendar
@@ -872,35 +872,12 @@ def formularioHourlySchedManagAdd(request):
     elif request.method == "POST" and "registrarFim" in request.POST:
         form = FormScheduleManagementAdd(request.POST)
         if form.is_valid():
-            idHsmemprocesso = ""
             realizado = HSMEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura'])
             for ins in realizado:
-                idHsmemprocesso = ins.id
                 inserir = HourlyScheduleManagementRealizado(diaeHoraEntrada=ins.diaeHoraEntrada, diaeHoraSaida=datetime.datetime.now(), id_estrutura_id = ins.id_estrutura_id, id_local_id = ins.id_local_id, id_usuario = ins.id_usuario)
                 inserir.save()
-            HSMTarefasGerais.objects.filter(id_hsmemprocesso_id = idHsmemprocesso, diaeHoraFim__isnull=True).delete()
-            HSMTarefasGerais.objects.filter(id_hsmemprocesso_id = idHsmemprocesso).update(id_hsmrealizado_id = HourlyScheduleManagementRealizado.objects.get(id = inserir.id))
-            deletar = HSMEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura']).delete()
+            deletar = deletar = HSMEmProcesso.objects.filter(id_local_id = request.POST['id_local'], id_estrutura_id = request.POST['id_estrutura']).delete()
             messages.success(request, 'Registrado com sucesso!')
-            form = FormScheduleManagementAdd()
-        return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
-    elif request.method == "POST" and "registrarInicioTG" in request.POST:
-        form = FormScheduleManagementAdd(request.POST)
-        if form.is_valid():
-            tg = TarefasGerais.objects.get(id = request.POST['id_tarefasgerais'])
-            hsmemprocesso = HSMEmProcesso.objects.get(id = request.POST['idHsmemprocesso'])
-            inserir = HSMTarefasGerais(id_tarefasgerais = tg, id_hsmemprocesso = hsmemprocesso, diaeHoraInicio = datetime.datetime.now())
-            inserir.save()
-            messages.success(request, 'TG registrado com sucesso!')
-            form = FormScheduleManagementAdd()
-        return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
-    elif request.method == "POST" and "registrarFimTG" in request.POST:
-        form = FormScheduleManagementAdd(request.POST)
-        if form.is_valid():
-            inserir = HSMTarefasGerais.objects.get(id = request.POST['idTgemprocesso'])
-            inserir.diaeHoraFim = datetime.datetime.now()
-            inserir.save()
-            messages.success(request, 'TG registrado com sucesso!')
             form = FormScheduleManagementAdd()
         return render(request, 'telaPrincipal/formHourlySchedManagAdd.html', {'form': form})
     else:
@@ -911,17 +888,14 @@ def carregarEstrProcHSM(request):
     idBusca = request.GET.get('id_local')
     exibirTodasOpcoesEstr = True
     exibirTG = False
-    listTarefasGerais = []
     id_usuario = ""
-    idHsmemprocesso = ""
     nome = ""
     dataHoraInicio = ""
     b = '''SELECT
             telaPrincipal_estrutura.id, telaPrincipal_estrutura.ordemproducao,
             telaPrincipal_estruturas.nome As nomeEstrutura, telaPrincipal_maquinas.nome As nomeMaquina,
             telaPrincipal_hsmemprocesso.diaeHoraEntrada, telaPrincipal_maquina.serial,
-            telaPrincipal_hsmemprocesso.id_usuario, auth_user.first_name, auth_user.last_name,
-            telaPrincipal_hsmemprocesso.id As idHsmemprocesso
+            telaPrincipal_hsmemprocesso.id_usuario, auth_user.first_name, auth_user.last_name
         FROM
             telaPrincipal_hsmemprocesso
         INNER JOIN
@@ -941,24 +915,9 @@ def carregarEstrProcHSM(request):
         for b in busca:
             dataHoraInicio = b.diaeHoraEntrada.strftime('%d/%m/%Y %H:%M')
             nome = b.last_name + " - " + b.first_name
-            idHsmemprocesso = b.idHsmemprocesso
             if (b.id_usuario == request.user.id):
+
                 exibirTG = True
-                b = '''SELECT
-                        telaPrincipal_hsmtarefasgerais.diaeHoraInicio,
-                        telaPrincipal_hsmtarefasgerais.diaeHoraFim,
-                        telaPrincipal_hsmtarefasgerais.id,
-                        telaPrincipal_tarefasgerais.sigla,
-                        telaPrincipal_tarefasgerais.nome
-                    FROM
-                        telaPrincipal_hsmtarefasgerais
-                    INNER JOIN
-                        telaPrincipal_tarefasgerais ON telaPrincipal_hsmtarefasgerais.id_tarefasgerais_id = telaPrincipal_tarefasgerais.id
-                    WHERE
-                        telaPrincipal_hsmtarefasgerais.id_hsmemprocesso_id = {0};'''.format(b.idHsmemprocesso)
-                buscac = models.HSMEmProcesso.objects.raw(b)
-                for c in buscac:
-                    listTarefasGerais.append([c.sigla + "-" + c.nome, c.diaeHoraInicio, c.diaeHoraFim, c.id])
         exibirTodasOpcoesEstr = False
     else:
         b = '''SELECT
@@ -984,7 +943,7 @@ def carregarEstrProcHSM(request):
             AND
                 telaPrincipal_estrutura.dataBaixaUsinagem is null;'''
         busca = models.Estrutura.objects.raw(b)
-    return render(request, 'telaPrincipal/estruturas_dropdown_list_optionsHSM.json', {'estruturas': busca, 'listTarefasGerais': listTarefasGerais, 'exibirTodasOpcoesEstr': exibirTodasOpcoesEstr, 'exibirTG': exibirTG, 'id_usuario': id_usuario, 'nome': nome, "dataHoraInicio": dataHoraInicio, 'idHsmemprocesso': idHsmemprocesso})
+    return render(request, 'telaPrincipal/estruturas_dropdown_list_optionsHSM.json', {'estruturas': busca, 'exibirTodasOpcoesEstr': exibirTodasOpcoesEstr, 'exibirTG': exibirTG, 'id_usuario': id_usuario, 'nome': nome, "dataHoraInicio": dataHoraInicio})
 
 def selecionarCartoesBaixar():
     b = '''SELECT

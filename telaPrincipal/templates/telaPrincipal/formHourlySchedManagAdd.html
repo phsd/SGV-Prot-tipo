@@ -18,7 +18,7 @@
     .itemFormOculto {
       display: none;
     }
-    #div_id_diaeHoraEntrada, #div_id_diaeHoraSaida {
+    #div_id_diaeHoraEntrada, #div_id_diaeHoraSaida, #div_id_id_estrutura, #div_id_id_tarefasgerais {
       margin: 0;
     }
   </style>
@@ -35,23 +35,39 @@
         {% endif %}
         <form method="POST" id="formHSMA" class="form-row" dataCarregarEstruturasURL="{% url 'telaPrincipal:ajaxCarEstrProcHSM' %}">
           {% csrf_token %}
+          <input type="hidden" id="idHsmemprocesso" name="idHsmemprocesso" value="" />
+          <input type="hidden" id="idTgemprocesso" name="idTgemprocesso" value="" />
           <div class="col-md-6">
             {{ form.id_local|as_crispy_field }}
           </div>
           <div class="col-md-6">
             {{ form.id_estrutura|as_crispy_field }}
+            <input type="text" id="estruturaSelecionada" class="itemFormOculto form-control" disabled="disabled" />
           </div>
           <div class="col-md-12">
             <div id="divAdicionarTG" class="itemFormOculto">
-              <div class="col-md-6">
-                {{ form.id_tarefasgerais|as_crispy_field }}
+              <div class="col-md-12">
+                <div class="box-content col-sm-8" style="border-top: 1px solid grey; font-weight: bold;">
+                  Tarefa Geral
+                </div>
+                <div class="box-content col-sm-2" style="border-top: 1px solid grey; font-weight: bold;">
+                  Início:
+                </div>
+                <div class="box-content col-sm-2" style="border-top: 1px solid grey; font-weight: bold;">
+                  Fim
+                </div>
               </div>
-              <div class="col-md-3 text-center">
-                <br />
+              <div id="listarTGS" class="col-md-12">
+              </div>
+              <div class="col-md-8" style="padding-top:1vh;">
+                {{ form.id_tarefasgerais|as_crispy_field }}
+                <input type="text" id="TgSelecionada" class="itemFormOculto form-control" disabled="disabled" />
+              </div>
+              <div class="col-md-2 text-center" style="padding-left:0; padding-top:1vh;">
+                <input type="text" id="textInicioTg" class="itemFormOculto form-control" disabled="disabled" />
                 <button type="submit" class="btn btn-primary itemFormOculto" id="registrarInicioTG" name="registrarInicioTG">Registrar TG</button>
               </div>
-              <div class="col-md-3 text-center">
-                <br />
+              <div class="col-md-2 text-center" style="padding-top:1vh;">
                 <button type="submit" class="btn btn-success itemFormOculto" id="registrarFimTG" name="registrarFimTG">Registrar TG</button>
               </div>
             </div>
@@ -84,58 +100,121 @@
       $("#id_id_local").change(function () {
         var url = $("#formHSMA").attr("dataCarregarEstruturasURL");  // get the url of the `load_cities` view
         var idLocal = $(this).val();  // get the selected country ID from the HTML input
-        $.ajax({                       // initialize an AJAX request
-          cache: false,
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-          data: {
-            'id_local': idLocal       // add the country id to the GET parameters
-          },
 
-        })
-        .done(function (response) {
-          $('#id_id_estrutura').empty();
-          $.each(response, function (index1, value1) {
-            if (value1.exibirTodasOpcoesEstr == "True") {
-              $('#divAdicionarTG').css({"display": "none"});
-              $('#spanIniciadoPor').text("");
-              $('#divIniciadoPor').css({"display": "none"});
-              $('#id_diaeHoraEntrada').val(value1.dataHoraInicio);
-              $('#id_diaeHoraEntrada').css({"display": "none"});
-              $('#registrarInicio').css({"display": "none"});
-              $('#registrarFim').css({"display": "none"});
-            }
-            else {
-              if (value1.exibirTG == "True") {
+        $( "#listarTGS" ).empty()
+        $('#id_id_estrutura').empty();
+        $("#id_id_tarefasgerais").val("");
+        $('#registrarInicioTG').css({"display": "none"});
+        $("#idHsmemprocesso").val("");
+        $("#idTgemprocesso").val("");
+        $('#TgSelecionada').css({"display": "none"});
+        $('#registrarInicioTG').css({"display": "none"});
+        $('#textInicioTg').css({"display": "none"});
+        $('#textInicioTg').val("");
+        $('#registrarFimTG').css({"display": "none"});
+
+        if (idLocal == "")
+        {
+          $('#id_id_estrutura').css({"display": "inline"});
+          $('#estruturaSelecionada').css({"display": "none"});
+          $('#id_id_estrutura').append(new Option("---------", ""));
+          $('#divIniciadoPor').css({"display": "none"});
+          $('#divAdicionarTG').css({"display": "none"});
+          $('#id_diaeHoraEntrada').css({"display": "none"});
+          $('#registrarInicio').css({"display": "none"});
+          $('#registrarFim').css({"display": "none"});
+        }
+        else
+        {
+          $.ajax({                       // initialize an AJAX request
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+              'id_local': idLocal       // add the country id to the GET parameters
+            },
+
+          })
+          .done(function (response) {
+            $.each(response, function (index1, value1) {
+              if (value1.exibirTodasOpcoesEstr == "True") {
+                $('#spanIniciadoPor').text("");
                 $('#divIniciadoPor').css({"display": "none"});
-                $('#divAdicionarTG').css({"display": "block"});
+                $('#divAdicionarTG').css({"display": "none"});
+
+                $('#id_diaeHoraEntrada').css({"display": "none"});
+                $('#registrarFim').css({"display": "none"});
               }
               else {
-                $('#divAdicionarTG').css({"display": "none"});
-                $('#spanIniciadoPor').text(value1.nome);
-                $('#divIniciadoPor').css({"display": "block"});
+                if (value1.exibirTG == "True") {
+                  $('#spanIniciadoPor').text("");
+                  $('#divIniciadoPor').css({"display": "none"});
+                  $('#divAdicionarTG').css({"display": "block"});
+                  $('#idHsmemprocesso').val(value1.idHsmemprocesso);
+                }
+                else {
+                  $('#spanIniciadoPor').text(value1.nome);
+                  $('#divIniciadoPor').css({"display": "block"});
+                  $('#divAdicionarTG').css({"display": "none"});
+                  $('#idHsmemprocesso').val("");
+                  $("#idTgemprocesso").val("");
+                }
+
+                $('#id_diaeHoraEntrada').css({"display": "inline"});
+                $('#registrarFim').css({"display": "inline"});
               }
-
-              $('#id_diaeHoraEntrada').val(value1.dataHoraInicio);
-              $('#id_diaeHoraEntrada').css({"display": "inline"});
               $('#registrarInicio').css({"display": "none"});
-              $('#registrarFim').css({"display": "inline"});
-            }
+              $('#id_diaeHoraEntrada').val(value1.dataHoraInicio);
 
-
-            $.each(this.opcoes, function (index2, value2) {
-              if (index2 == 0) {
-                if (value1.exibirTodasOpcoesEstr == "True") {
+              $('#id_id_tarefasgerais').css({"display": "inline"});
+              $('#registrarInicioTG').css({"display": "none"});
+              $('#registrarFimTG').css({"display": "none"});
+              $('#textInicioTg').css({"display": "none"});
+              $.each(this.listTarefasGerais, function (index3, value3) {
+                $("#idTgemprocesso").val("");
+                $('#TgSelecionada').css({"display": "none"});
+                $('#id_id_tarefasgerais').css({"display": "block"});
+                if (value3.diaeHoraFim == "")
+                {
+                  $("#idTgemprocesso").val(value3.idTg);
+                  $('#id_id_tarefasgerais').css({"display": "none"});
+                  $('#TgSelecionada').css({"display": "block"});
+                  $('#TgSelecionada').val(value3.tgsiglaenome);
+                  $('#registrarFimTG').css({"display": "inline"});
+                  $('#textInicioTg').css({"display": "inline"});
+                  $('#textInicioTg').val(value3.diaeHoraInicio);
+                  $('#registrarFim').css({"display": "none"});
+                }
+                else {
+                  $( "#listarTGS" ).append('<div class="box-content col-sm-8" style="border-top: 1px solid grey;">' + value3.tgsiglaenome + '</div>');
+                  $( "#listarTGS" ).append('<div class="box-content col-sm-2" style="border-top: 1px solid grey;">' + value3.diaeHoraInicio + '</div>');
+                  $( "#listarTGS" ).append('<div class="box-content col-sm-2" style="border-top: 1px solid grey;">' + value3.diaeHoraFim + '</div>');
+                }
+              });
+              $.each(this.opcoes, function (index2, value2) {
+                if (index2 == 0) {
+                  if (value1.exibirTodasOpcoesEstr == "True") {
+                    $('#id_id_estrutura').css({"display": "inline"});
+                    $('#estruturaSelecionada').css({"display": "none"});
+                    $('#estruturaSelecionada').text("");
+                    $('#id_id_estrutura').append(new Option(value2.rotulo,value2.id));
+                  }
+                  else {
+                    $('#id_id_estrutura').css({"display": "none"});
+                    $('#estruturaSelecionada').css({"display": "inline"});
+                  }
+                }
+                else {
                   $('#id_id_estrutura').append(new Option(value2.rotulo,value2.id));
                 }
-              }
-              else {
-                $('#id_id_estrutura').append(new Option(value2.rotulo,value2.id));
-              }
-            })
-          })
-        });
+                if (value1.exibirTodasOpcoesEstr == "False") {
+                  $('#estruturaSelecionada').val(value2.rotulo);
+                }
+              });
+            });
+          });
+        }
       });
       $("#id_id_estrutura").change(function () {
         $('#id_diaeHoraEntrada').css({"display": "none"});
@@ -145,6 +224,15 @@
         }
         else {
           $('#registrarInicio').css({"display": "none"});
+        }
+      });
+
+      $("#id_id_tarefasgerais").change(function () {
+        if ($(this).val() != "") {
+          $('#registrarInicioTG').css({"display": "inline"});
+        }
+        else {
+          $('#registrarInicioTG').css({"display": "none"});
         }
       });
     });

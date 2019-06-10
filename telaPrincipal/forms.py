@@ -62,9 +62,9 @@ class FormEstrutura(forms.ModelForm):
             'prazopintura': 'Dias para Pintura:',
         }
 LOCAISLIST = []
-#busca = Locais.objects.filter()
-#for b in busca:
-#    LOCAISLIST.append([b.id, b.nome])
+busca = Locais.objects.filter()
+for b in busca:
+    LOCAISLIST.append([b.id, b.nome])
 
 MES = [
     ('1', 'Janeiro'),
@@ -163,7 +163,7 @@ class FormScheduleManagementAdd(forms.ModelForm):
         self.fields['diaeHoraSaida'].widget.attrs.update({'class' : 'itemFormOculto'})
         self.fields['diaeHoraSaida'].widget.attrs.update({'disabled' : 'disabled'})
         self.fields['diaeHoraSaida'].required = False
-
+        self.fields['id_tarefasgerais'].label = False
 
         if 'id_estrutura' in self.data:
             try:
@@ -177,5 +177,5 @@ class FormScheduleManagementAdd(forms.ModelForm):
         model = HSMEmProcesso
         fields = ('id_local', 'id_estrutura', 'diaeHoraEntrada', 'diaeHoraSaida', 'id_tarefasgerais')
         labels = {
-            'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:', 'id_tarefasgerais': "Selecionar TG:",
+            'id_local': 'Local:', 'id_estrutura': 'Estrutura:', 'diaeHoraEntrada': 'Início:', 'diaeHoraSaida': 'Fim:', 'id_tarefasgerais': "Adicionar TG:",
         }

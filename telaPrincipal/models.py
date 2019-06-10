@@ -131,7 +131,7 @@ class TarefasGerais (models.Model):
 
 class HSMTarefasGerais (models.Model):
     id_tarefasgerais = models.ForeignKey('TarefasGerais', on_delete=models.PROTECT)
-    id_hsmemprocesso = models.ForeignKey('HSMEmProcesso', on_delete=models.PROTECT)
-    id_hsmrealizado = models.ForeignKey('HourlyScheduleManagementRealizado', on_delete=models.PROTECT)
+    id_hsmemprocesso = models.ForeignKey('HSMEmProcesso', on_delete=models.SET_NULL, blank=True, null=True)
+    id_hsmrealizado = models.ForeignKey('HourlyScheduleManagementRealizado', on_delete=models.PROTECT, blank=True, null=True)
     diaeHoraInicio = models.DateTimeField(null=True, blank=True)
     diaeHoraFim = models.DateTimeField(null=True, blank=True)
