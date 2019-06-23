@@ -62,7 +62,8 @@ class FormEstrutura(forms.ModelForm):
             'prazopintura': 'Dias para Pintura:',
         }
 LOCAISLIST = []
-busca = Locais.objects.filter()
+#busca = Locais.objects.filter()
+busca Locais.objects.raw("SELECT id, nome FROM telaPrincipal_Locais")
 for b in busca:
     LOCAISLIST.append([b.id, b.nome])
 

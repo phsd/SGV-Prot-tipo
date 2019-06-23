@@ -46,28 +46,19 @@
           </div>
           <div class="col-md-12">
             <div id="divAdicionarTG" class="itemFormOculto">
-              <div class="col-md-12">
-                <div class="box-content col-sm-8" style="border-top: 1px solid grey; font-weight: bold;">
-                  Tarefa Geral
-                </div>
-                <div class="box-content col-sm-2" style="border-top: 1px solid grey; font-weight: bold;">
-                  Início:
-                </div>
-                <div class="box-content col-sm-2" style="border-top: 1px solid grey; font-weight: bold;">
-                  Fim
-                </div>
-              </div>
               <div id="listarTGS" class="col-md-12">
               </div>
               <div class="col-md-8" style="padding-top:1vh;">
-                {{ form.id_tarefasgerais|as_crispy_field }}
+                <div style="font-weight: bold;">Tarefa Geral:</div>{{ form.id_tarefasgerais|as_crispy_field }}
                 <input type="text" id="TgSelecionada" class="itemFormOculto form-control" disabled="disabled" />
               </div>
               <div class="col-md-2 text-center" style="padding-left:0; padding-top:1vh;">
+                <div style="font-weight: bold;">Início:</div>
                 <input type="text" id="textInicioTg" class="itemFormOculto form-control" disabled="disabled" />
                 <button type="submit" class="btn btn-primary itemFormOculto" id="registrarInicioTG" name="registrarInicioTG">Registrar TG</button>
               </div>
               <div class="col-md-2 text-center" style="padding-top:1vh;">
+                <div style="font-weight: bold;">Fim:</div>
                 <button type="submit" class="btn btn-success itemFormOculto" id="registrarFimTG" name="registrarFimTG">Registrar TG</button>
               </div>
             </div>
@@ -187,9 +178,9 @@
                   $('#registrarFim').css({"display": "none"});
                 }
                 else {
-                  $( "#listarTGS" ).append('<div class="box-content col-sm-8" style="border-top: 1px solid grey;">' + value3.tgsiglaenome + '</div>');
-                  $( "#listarTGS" ).append('<div class="box-content col-sm-2" style="border-top: 1px solid grey;">' + value3.diaeHoraInicio + '</div>');
-                  $( "#listarTGS" ).append('<div class="box-content col-sm-2" style="border-top: 1px solid grey;">' + value3.diaeHoraFim + '</div>');
+                  $( "#listarTGS" ).append('<div class="box-content col-sm-8" style="border-top: 1px solid grey;"><div style="font-weight: bold;">Tarefa Geral:</div>' + value3.tgsiglaenome + '</div>');
+                  $( "#listarTGS" ).append('<div class="box-content col-sm-2" style="border-top: 1px solid grey;"><div style="font-weight: bold;">Início:</div>' + value3.diaeHoraInicio + '</div>');
+                  $( "#listarTGS" ).append('<div class="box-content col-sm-2" style="border-top: 1px solid grey;"><div style="font-weight: bold;">Fim:</div>' + value3.diaeHoraFim + '</div>');
                 }
               });
               $.each(this.opcoes, function (index2, value2) {
