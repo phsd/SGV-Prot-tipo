@@ -21,6 +21,11 @@
     #div_id_diaeHoraEntrada, #div_id_diaeHoraSaida, #div_id_id_estrutura, #div_id_id_tarefasgerais {
       margin: 0;
     }
+    .fundoTGs {
+      border: 1px solid LightSkyBlue;
+      padding: 0.5vh;
+      margin-top: 1vh;
+    }
   </style>
   <div class="content mt-3">
     <div class="card">
@@ -45,23 +50,6 @@
             <input type="text" id="estruturaSelecionada" class="itemFormOculto form-control" disabled="disabled" />
           </div>
           <div class="col-md-12">
-            <div id="divAdicionarTG" class="itemFormOculto">
-              <div id="listarTGS" class="col-md-12">
-              </div>
-              <div class="col-md-8" style="padding-top:1vh;">
-                <div style="font-weight: bold;">Tarefa Geral:</div>{{ form.id_tarefasgerais|as_crispy_field }}
-                <input type="text" id="TgSelecionada" class="itemFormOculto form-control" disabled="disabled" />
-              </div>
-              <div class="col-md-2 text-center" style="padding-left:0; padding-top:1vh; ">
-                <div style="font-weight: bold;">Início:</div>
-                <input type="text" id="textInicioTg" class="itemFormOculto form-control" disabled="disabled" />
-                <button type="submit" class="btn btn-primary itemFormOculto" id="registrarInicioTG" name="registrarInicioTG">Registrar TG</button>
-              </div>
-              <div class="col-md-2 text-center" style="padding-top:1vh;">
-                <div style="font-weight: bold;">Fim:</div>
-                <button type="submit" class="btn btn-success itemFormOculto" id="registrarFimTG" name="registrarFimTG">Registrar TG</button>
-              </div>
-            </div>
             <div class="alert alert-warning itemFormOculto" id="divIniciadoPor" role="alert">
               <strong>Iniciado por: </strong><span id="spanIniciadoPor"> </span>
             </div>
@@ -76,6 +64,24 @@
             {{ form.diaeHoraSaida|as_crispy_field }}
             <div class="text-center">
               <button type="submit" class="btn btn-success itemFormOculto" id="registrarFim" name="registrarFim">Registrar</button>
+            </div>
+          </div>
+          <div id="divAdicionarTG" class="itemFormOculto fundoTGs">
+            <h5 class="text-center font-weight-bold" style="margin-bottom: 0.5vh;">Tarefas Gerais</h5>
+            <div id="listarTGS" class="col-md-12">
+            </div>
+            <div class="col-md-8" style="padding-top:1vh;">
+              <div style="font-weight: bold;">Tarefa Geral:</div>{{ form.id_tarefasgerais|as_crispy_field }}
+              <input type="text" id="TgSelecionada" class="itemFormOculto form-control" disabled="disabled" />
+            </div>
+            <div class="col-md-2 text-center" style="padding-left:0; padding-top:1vh; ">
+              <div style="font-weight: bold;">Início:</div>
+              <input type="text" id="textInicioTg" class="itemFormOculto form-control" disabled="disabled" />
+              <button type="submit" class="btn btn-primary itemFormOculto" id="registrarInicioTG" name="registrarInicioTG">Registrar TG</button>
+            </div>
+            <div class="col-md-2 text-center" style="padding-top:1vh;">
+              <div style="font-weight: bold;">Fim:</div>
+              <button type="submit" class="btn btn-success itemFormOculto" id="registrarFimTG" name="registrarFimTG">Registrar TG</button>
             </div>
           </div>
         </form>
