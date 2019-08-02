@@ -380,7 +380,6 @@ def maquina(request, id_maquina, id_estrutura):
             diasProcesso = []
             diasUteis = 0
             #if inicio.hour > 12:
-            inicio = inicio + timedelta(days = 1)
             inicio = inicio.replace(hour=0, minute=0, second=0, microsecond=0)
             for n in range (0, numdias * 2):
                 if (inicio + timedelta(n)).weekday() != 6:
@@ -461,18 +460,18 @@ def maquina(request, id_maquina, id_estrutura):
         estrutura.append(len(diasProcesso)) #2
         estrutura.append(diasProcesso) #3
 
-        diasProcesso = calendProcesso1(diasProcesso[-1][1], b.prazopadraocaldsolda + b.prazocaldsolda)
+        diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), b.prazopadraocaldsolda + b.prazocaldsolda)
         estrutura.append(len(diasProcesso)) #4
         estrutura.append(diasProcesso) #5
 
-        diasProcesso = calendProcesso1(diasProcesso[-1][1], b.prazopadraousinagem + b.prazousinagem)
+        diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), b.prazopadraousinagem + b.prazousinagem)
         estrutura.append(len(diasProcesso)) #6
         estrutura.append(diasProcesso) #7
 
-        diasProcesso = calendProcesso1(diasProcesso[-1][1], b.prazopadraopintura + b.prazopintura)
+        diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), b.prazopadraopintura + b.prazopintura)
         estrutura.append(len(diasProcesso)) #8
         estrutura.append(diasProcesso) #9
-        diasProcesso = calendProcesso1(diasProcesso[-1][1], subtrairdatasuteis(b.dataEntregaMax, diasProcesso[-1][1]))
+        diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), subtrairdatasuteis(b.dataEntregaMax, diasProcesso[-1][1]))
         estrutura.append(len(diasProcesso)) #10
         estrutura.append(diasProcesso) #11
 
