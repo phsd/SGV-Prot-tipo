@@ -399,6 +399,8 @@ def maquina(request, id_maquina, id_estrutura):
             return ()
 
     def calendProcesso2(inicio, fim1, prazoMaxProcesso, destaque):
+        print("destaqueaqui")
+        print(destaque)
         if fim1 == "agora":
             fim = datetime.datetime.today()
         else:
