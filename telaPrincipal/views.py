@@ -111,7 +111,7 @@ def index(request):
             print (dataEntregaEstimada)
             if posicaoGestaoaVista >= 0:
                 print ("aqui1")
-                diasDisponiveis = subtrairdatasuteis(b.dataEntregaMax.replace(tzinfo=None), dataEntregaEstimada)
+                diasDisponiveis = subtrairdatasuteis(b.dataEntregaMax.replace(tzinfo=None), dataEntregaEstimada) - 1
             else:
                 print ("aqui2")
                 diasDisponiveis = subtrairdatas(dataEntregaEstimada, b.dataEntregaMax.replace(tzinfo=None)) - 1
