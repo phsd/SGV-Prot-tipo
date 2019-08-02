@@ -414,9 +414,15 @@ def maquina(request, id_maquina, id_estrutura):
                 if (inicio + timedelta(n)).weekday() != 6:
                     diasUteis = diasUteis + 1
                     if diasUteis <= prazoMaxProcesso:
-                        diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentrega", "", ""])
+                        if (str(id_estrutura) == str(b.id)):
+                            diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentregadest", "", ""])
+                        else:
+                            diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentrega", "", ""])
                     else:
-                        diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentrega", "", ""])
+                        if (str(id_estrutura) == str(b.id)):
+                            diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentregadest", "", ""])
+                        else:
+                            diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentrega", "", ""])
                 else:
                     if n >= 0:
                         diasProcesso.append(["Dom", inicio + timedelta(n), "domingo", "", ""])
