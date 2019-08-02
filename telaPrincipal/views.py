@@ -375,6 +375,8 @@ def index(request):
     return render (request, "telaPrincipal/index.html", contexto)
 
 def maquina(request, id_maquina, id_estrutura):
+    estrDestaque = "false"
+
     def calendProcesso1(inicio, numdias):
         if numdias > 0:
             diasProcesso = []
@@ -414,12 +416,12 @@ def maquina(request, id_maquina, id_estrutura):
                 if (inicio + timedelta(n)).weekday() != 6:
                     diasUteis = diasUteis + 1
                     if diasUteis <= prazoMaxProcesso:
-                        if (str(id_estrutura) == str(b.id)):
+                        if (estrDestaque == "true"):
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentregadest", "", ""])
                         else:
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentrega", "", ""])
                     else:
-                        if (str(id_estrutura) == str(b.id)):
+                        if (estrDestaque == "true"):
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentregadest", "", ""])
                         else:
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentrega", "", ""])
@@ -457,6 +459,8 @@ def maquina(request, id_maquina, id_estrutura):
     estruturas = []
     maquina = ['', '', '']
     for b in busca:
+        if (str(id_estrutura) == str(b.id)):
+            estrDestaque = "true"
         estrutura = []
         maquina[0] = b.serial
         maquina[1] = b.nomemaquina
@@ -531,7 +535,7 @@ def maquina(request, id_maquina, id_estrutura):
             estrutura.append("") #18 pintura
             estrutura.append("") #19 pintura
 
-        if (str(id_estrutura) == str(b.id)):
+        if (estrDestaque == "true"):
             estrutura.append("estruturadestaque")
         else:
             estrutura.append("")
