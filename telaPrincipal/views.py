@@ -381,7 +381,7 @@ def maquina(request, id_maquina, id_estrutura):
             diasUteis = 0
             #if inicio.hour > 12:
             inicio = inicio.replace(hour=0, minute=0, second=0, microsecond=0)
-            for n in range (0, numdias * 2):
+            for n in range (0, (numdias * 2) + 1):
                 if (inicio + timedelta(n)).weekday() != 6:
                     diasUteis = diasUteis + 1
                     diasProcesso.append([diasUteis, (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
