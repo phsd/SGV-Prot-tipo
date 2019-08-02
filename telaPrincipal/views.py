@@ -378,6 +378,10 @@ def maquina(request, id_maquina, id_estrutura):
     estrDestaque = "false"
 
     def calendProcesso1(inicio, numdias):
+        if (estrDestaque == "true"):
+            cssBloco = "blocodestaque"
+        else:
+            cssBloco = "bloco"
         if numdias > 0:
             diasProcesso = []
             diasUteis = 0
@@ -386,14 +390,14 @@ def maquina(request, id_maquina, id_estrutura):
             for n in range (0, numdias * 2):
                 if (inicio + timedelta(n)).weekday() != 6:
                     diasUteis = diasUteis + 1
-                    diasProcesso.append([diasUteis, (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
+                    diasProcesso.append([diasUteis, (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)], cssBloco)
                 else:
                     if n > 0:
-                        diasProcesso.append(["Dom", (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)])
+                        diasProcesso.append(["Dom", (inicio + timedelta(n)).replace(hour=23, minute=59, second=59, microsecond=0)], cssBloco)
                 if diasUteis >= numdias:
                     break;
             if (inicio + timedelta(n + 1)).weekday() == 6:
-                diasProcesso.append(["Dom", (inicio + timedelta(n+1)).replace(hour=23, minute=59, second=59, microsecond=0)])
+                diasProcesso.append(["Dom", (inicio + timedelta(n+1)).replace(hour=23, minute=59, second=59, microsecond=0)], cssBloco)
             return(diasProcesso)
         else:
             print (numdias)

@@ -83,6 +83,10 @@
       font-size: 1.5vh;
       min-width: 6vh;
     }
+    .linhadotempo .blocodestaque {
+      color: white !important;
+      background-color: 1px solid #00AACC;
+    }
     .linhadotempo .bloco .numdoDia{
       font-weight: bold;
     }
@@ -98,10 +102,12 @@
     .linhadotempo .bloconoprazodeentregadest {
       background-color: #009900;
       border: 1px solid #009900 !important;
+      color: white !important;
     }
     .linhadotempo .blocoforadoprazodeentregadest {
       background-color: red;
       border: 1px solid red !important;
+      color: white !important;
     }
     .linhadotempo .domingo {
       background-color: lemonchiffon;
@@ -130,7 +136,7 @@
                 Corte
               </div>
               {% for i in e.3 %}
-                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                  <div class="bloco {{i.2}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
                     <div class="numdoDia">{{i.0}}</div>
                     {{ i.1|date:"j/m" }}<br />
                   </div>
@@ -142,7 +148,7 @@
                 Cald/Solda
               </div>
               {% for i in e.5 %}
-                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                  <div class="bloco {{i.0}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
                     <div class="numdoDia">{{i.0}}</div>
                     {{ i.1|date:"j/m" }}
                   </div>
@@ -154,7 +160,7 @@
                 Usinagem
               </div>
               {% for i in e.7 %}
-                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                  <div class="bloco {{i.0}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
                     <div class="numdoDia">{{i.0}}</div>
                     {{ i.1|date:"j/m" }}
                   </div>
@@ -166,7 +172,7 @@
                 Pintura
               </div>
               {% for i in e.9 %}
-                  <div class="bloco" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
+                  <div class="bloco {{i.0}}" style="-ms-grid-column:{{forloop.counter}}; -ms-grid-row: 2;">
                     <div class="numdoDia">{{i.0}}</div>
                     {{ i.1|date:"j/m" }}
                   </div>
