@@ -474,7 +474,7 @@ def maquina(request, id_maquina, id_estrutura):
         print("aqui123")
         print(b.dataEntregaMax)
         print(diasProcesso[-1][1])
-        diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), subtrairdatasuteis(b.dataEntregaMax, diasProcesso[-1][1]))
+        diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), subtrairdatasuteis(b.dataEntregaMax, diasProcesso[-1][1].replace(hour=0, minute=0, second=0, microsecond=0)))
         estrutura.append(len(diasProcesso)) #10
         estrutura.append(diasProcesso) #11
 
