@@ -375,7 +375,6 @@ def index(request):
     return render (request, "telaPrincipal/index.html", contexto)
 
 def maquina(request, id_maquina, id_estrutura):
-    estrDestaque = "false"
 
     def calendProcesso1(inicio, numdias):
         if numdias > 0:
@@ -399,7 +398,7 @@ def maquina(request, id_maquina, id_estrutura):
             print (numdias)
             return ()
 
-    def calendProcesso2(inicio, fim1, prazoMaxProcesso):
+    def calendProcesso2(inicio, fim1, prazoMaxProcesso, destaque):
         if fim1 == "agora":
             fim = datetime.datetime.today()
         else:
@@ -416,12 +415,12 @@ def maquina(request, id_maquina, id_estrutura):
                 if (inicio + timedelta(n)).weekday() != 6:
                     diasUteis = diasUteis + 1
                     if diasUteis <= prazoMaxProcesso:
-                        if (estrDestaque == "true"):
+                        if (destaque == "true"):
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentregadest", "", ""])
                         else:
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "bloconoprazodeentrega", "", ""])
                     else:
-                        if (estrDestaque == "true"):
+                        if (destaque == "true"):
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentregadest", "", ""])
                         else:
                             diasProcesso.append([diasUteis, inicio + timedelta(n), "blocoforadoprazodeentrega", "", ""])
@@ -459,6 +458,7 @@ def maquina(request, id_maquina, id_estrutura):
     estruturas = []
     maquina = ['', '', '']
     for b in busca:
+        estrDestaque = "false"
         if (str(id_estrutura) == str(b.id)):
             estrDestaque = "true"
         estrutura = []
@@ -481,43 +481,40 @@ def maquina(request, id_maquina, id_estrutura):
         diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), b.prazopadraopintura + b.prazopintura)
         estrutura.append(len(diasProcesso)) #8
         estrutura.append(diasProcesso) #9
-        print("aqui123")
-        print(b.dataEntregaMax)
-        print(diasProcesso[-1][1])
         diasProcesso = calendProcesso1(diasProcesso[-1][1] + timedelta(days = 1), subtrairdatas(diasProcesso[-1][1], b.dataEntregaMax))
         estrutura.append(len(diasProcesso)) #10
         estrutura.append(diasProcesso) #11
 
         if (b.dataBaixaCorte is not None):
-            diasProcesso = calendProcesso2(b.dataInicioManufatura, b.dataBaixaCorte, b.prazopadraocorte + b.prazocorte)
+            diasProcesso = calendProcesso2(b.dataInicioManufatura, b.dataBaixaCorte, b.prazopadraocorte + b.prazocorte, estrDestaque)
             estrutura.append(len(diasProcesso)) #12 corte
             estrutura.append(diasProcesso) #13 corte
             if (b.dataBaixaCaldSolda is not None):
                 print("aqui")
                 print(b.dataBaixaCorte, b.dataBaixaCaldSolda, b.prazopadraocaldsolda + b.prazocaldsolda)
-                diasProcesso = calendProcesso2(b.dataBaixaCorte, b.dataBaixaCaldSolda, b.prazopadraocaldsolda + b.prazocaldsolda)
+                diasProcesso = calendProcesso2(b.dataBaixaCorte, b.dataBaixaCaldSolda, b.prazopadraocaldsolda + b.prazocaldsolda, estrDestaque)
                 estrutura.append(len(diasProcesso)) #14 cald/solda
                 estrutura.append(diasProcesso) #15 cald/solda
                 if (b.dataBaixaUsinagem is not None):
-                    diasProcesso = calendProcesso2(b.dataBaixaCaldSolda, b.dataBaixaUsinagem, b.prazopadraousinagem + b.prazousinagem)
+                    diasProcesso = calendProcesso2(b.dataBaixaCaldSolda, b.dataBaixaUsinagem, b.prazopadraousinagem + b.prazousinagem, estrDestaque)
                     estrutura.append(len(diasProcesso)) #16 usinagem
                     estrutura.append(diasProcesso) #17 usinagem
                     if (b.dataBaixaPintura is not None):
-                        diasProcesso = calendProcesso2(b.dataBaixaUsinagem, b.dataBaixaPintura, b.prazopadraopintura + b.prazopintura)
+                        diasProcesso = calendProcesso2(b.dataBaixaUsinagem, b.dataBaixaPintura, b.prazopadraopintura + b.prazopintura, estrDestaque)
                         estrutura.append(len(diasProcesso)) #18 pintura
                         estrutura.append(diasProcesso) #19 pintura
                     else:
-                        diasProcesso = calendProcesso2(b.dataBaixaUsinagem, "agora", b.prazopadraopintura + b.prazopintura)
+                        diasProcesso = calendProcesso2(b.dataBaixaUsinagem, "agora", b.prazopadraopintura + b.prazopintura, estrDestaque)
                         estrutura.append(len(diasProcesso)) #18 pintura
                         estrutura.append(diasProcesso) #19 pintura
                 else:
-                    diasProcesso = calendProcesso2(b.dataBaixaCaldSolda, "agora", b.prazopadraousinagem + b.prazousinagem)
+                    diasProcesso = calendProcesso2(b.dataBaixaCaldSolda, "agora", b.prazopadraousinagem + b.prazousinagem, estrDestaque)
                     estrutura.append(len(diasProcesso)) #16 usinagem
                     estrutura.append(diasProcesso) #17 usinagem
                     estrutura.append("") #18 pintura
                     estrutura.append("") #19 pintura
             else:
-                diasProcesso = calendProcesso2(b.dataBaixaCorte, "agora", b.prazopadraocaldsolda + b.prazocaldsolda)
+                diasProcesso = calendProcesso2(b.dataBaixaCorte, "agora", b.prazopadraocaldsolda + b.prazocaldsolda, estrDestaque)
                 estrutura.append(len(diasProcesso)) #14 cald/solda
                 estrutura.append(diasProcesso) #15 cald/solda
                 estrutura.append("") #16 usinagem
@@ -525,7 +522,7 @@ def maquina(request, id_maquina, id_estrutura):
                 estrutura.append("") #18 pintura
                 estrutura.append("") #19 pintura
         else:
-            diasProcesso = calendProcesso2(b.dataInicioManufatura, "agora", b.prazopadraocorte + b.prazocorte)
+            diasProcesso = calendProcesso2(b.dataInicioManufatura, "agora", b.prazopadraocorte + b.prazocorte, estrDestaque)
             estrutura.append(len(diasProcesso)) #12 corte
             estrutura.append(diasProcesso) #13 corte
             estrutura.append("") #14 cald/solda
